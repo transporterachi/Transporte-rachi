@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Transporte Rachi - MVP</title>
+<style>
+:root{
+  --bg:#0f172a;
+  --panel:#111827;
+  --card:#ffffff;
+  --muted:#64748b;
+  --blue:#2563eb;
+  --green:#16a34a;
+  --yellow:#d97706;
+  --red:#dc2626;
+  --light:#f8fafc;
+  --border:#e2e8f0;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#eef2f7;color:#0f172a}
+header{
+  background:linear-gradient(135deg,#0f172a,#1e3a5f);
+  color:white;padding:18px 22px;display:flex;justify-content:space-between;align-items:center;
+  position:sticky;top:0;z-index:10
+}
+.brand{font-size:24px;font-weight:800;letter-spacing:.5px}
+.brand span{font-weight:400;font-size:13px;display:block;opacity:.75;margin-top:3px}
+nav{display:flex;gap:8px;flex-wrap:wrap}
+nav button{
+  background:rgba(255,255,255,.08);color:white;border:1px solid rgba(255,255,255,.15);
+  border-radius:10px;padding:10px 13px;cursor:pointer
+}
+nav button.active{background:#2563eb}
+.container{max-width:1250px;margin:0 auto;padding:22px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.card{background:white;border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:0 4px 14px rgba(15,23,42,.05)}
+.kpi{font-size:30px;font-weight:800;margin-top:6px}
+.label{font-size:13px;color:var(--muted)}
+.section-title{font-size:22px;font-weight:800;margin:4px 0 14px}
+.two{display:grid;grid-template-columns:1.3fr .7fr;gap:16px;margin-top:16px}
+table{width:100%;border-collapse:collapse}
+th,td{padding:11px 9px;text-align:left;border-bottom:1px solid var(--border);font-size:14px}
+th{color:#475569;font-size:12px;text-transform:uppercase}
+.badge{padding:5px 8px;border-radius:999px;font-size:12px;font-weight:700;display:inline-block}
+.green{background:#dcfce7;color:#166534}
+.blue{background:#dbeafe;color:#1d4ed8}
+.yellow{background:#fef3c7;color:#92400e}
+.red{background:#fee2e2;color:#991b1b}
+.btn{border:0;border-radius:10px;padding:10px 13px;cursor:pointer;font-weight:700}
+.btn-primary{background:#2563eb;color:white}
+.btn-success{background:#16a34a;color:white}
+.btn-light{background:#f1f5f9;color:#0f172a}
+.hidden{display:none}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+input,select{
+  width:100%;padding:11px;border-radius:10px;border:1px solid #cbd5e1;background:white
+}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.mobile-shell{
+  max-width:420px;margin:0 auto;background:#0f172a;border-radius:28px;padding:10px;
+  box-shadow:0 16px 40px rgba(15,23,42,.2)
+}
+.phone{
+  background:#f8fafc;border-radius:22px;overflow:hidden;min-height:650px
+}
+.phone-top{background:#0f172a;color:white;padding:18px}
+.phone-content{padding:16px}
+.trip{background:white;border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
+.trip h3{margin:0 0 8px}
+.trip p{margin:5px 0;color:#475569;font-size:14px}
+.bigbtn{width:100%;padding:14px;margin-top:8px;border:0;border-radius:11px;font-weight:800;cursor:pointer}
+.map{
+  background:linear-gradient(135deg,#dbeafe,#dcfce7);height:280px;border-radius:15px;
+  display:flex;align-items:center;justify-content:center;color:#334155;font-weight:700;text-align:center;padding:20px
+}
+.alert{padding:10px 0;border-bottom:1px solid var(--border);font-size:14px}
+.footer{padding:30px;text-align:center;color:#64748b;font-size:13px}
+@media(max-width:900px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .two{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  header{align-items:flex-start;gap:15px;flex-direction:column}
+  .grid{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  .container{padding:14px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">TRANSPORTE RACHI<span>Sistema de gestión operativa</span></div>
+  <nav>
+    <button class="active" onclick="showTab('panel',this)">Panel</button>
+    <button onclick="showTab('viajes',this)">Viajes</button>
+    <button onclick="showTab('chofer',this)">App Chofer</button>
+    <button onclick="showTab('flota',this)">Flota</button>
+    <button onclick="showTab('clientes',this)">Clientes</button>
+  </nav>
+</header>
+
+<div class="container">
+
+<section id="panel">
+  <div class="section-title">Centro de operaciones</div>
+  <div class="grid">
+    <div class="card"><div class="label">Viajes hoy</div><div class="kpi" id="kpiTrips">8</div></div>
+    <div class="card"><div class="label">Unidades activas</div><div class="kpi">6</div></div>
+    <div class="card"><div class="label">Choferes en servicio</div><div class="kpi">5</div></div>
+    <div class="card"><div class="label">Alertas</div><div class="kpi" style="color:#dc2626">2</div></div>
+  </div>
+
+  <div class="two">
+    <div class="card">
+      <div class="section-title" style="font-size:18px">Próximos viajes</div>
+      <table id="dashboardTrips"></table>
+    </div>
+    <div class="card">
+      <div class="section-title" style="font-size:18px">Alertas</div>
+      <div class="alert">🟡 Seguro Sprinter 04 vence en 5 días</div>
+      <div class="alert">🟡 VTV Hiace 06 vence en 10 días</div>
+      <div class="alert">🔴 Chofer sin apto médico actualizado</div>
+      <div class="alert">🔵 Mantenimiento programado Sprinter 08</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="section-title" style="font-size:18px">Mapa en tiempo real</div>
+    <div class="map">Mapa GPS simulado<br/>Bahía Blanca / Ingeniero White / Parque Industrial<br/><br/>En una versión productiva se integraría Google Maps, Mapbox o similar.</div>
+  </div>
+</section>
+
+<section id="viajes" class="hidden">
+  <div class="section-title">Gestión de viajes</div>
+  <div class="card">
+    <div class="form-grid">
+      <div><div class="label">Cliente</div><input id="cliente" placeholder="Ej. Unipar"></div>
+      <div><div class="label">Hora</div><input id="hora" type="time"></div>
+      <div><div class="label">Origen</div><input id="origen" placeholder="Ej. Hotel Austral"></div>
+      <div><div class="label">Destino</div><input id="destino" placeholder="Ej. Planta"></div>
+      <div><div class="label">Chofer</div><select id="driver"></select></div>
+      <div><div class="label">Unidad</div><select id="vehicle"></select></div>
+    </div>
+    <div class="actions" style="margin-top:14px">
+      <button class="btn btn-primary" onclick="addTrip()">Crear viaje</button>
+      <button class="btn btn-light" onclick="loadDemo()">Cargar demo</button>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <table id="tripTable"></table>
+  </div>
+</section>
+
+<section id="chofer" class="hidden">
+  <div class="section-title">App del chofer</div>
+  <div class="mobile-shell">
+    <div class="phone">
+      <div class="phone-top">
+        <div style="font-weight:800;font-size:19px">TRANSPORTE RACHI</div>
+        <div style="opacity:.75;margin-top:4px">Hola, Mauro</div>
+      </div>
+      <div class="phone-content">
+        <div class="label" style="margin-bottom:10px">Próximo servicio</div>
+        <div class="trip">
+          <h3>Viaje #4582 <span class="badge green">Asignado</span></h3>
+          <p><b>Cliente:</b> Unipar</p>
+          <p><b>Hora:</b> 06:00</p>
+          <p><b>Origen:</b> White - Hotel Austral</p>
+          <p><b>Destino:</b> Planta Unipar</p>
+          <p><b>Pasajeros:</b> 11</p>
+          <p><b>Unidad:</b> Sprinter 416</p>
+          <button class="bigbtn btn-success" onclick="driverAction(this,'Viaje iniciado')">Iniciar viaje</button>
+          <button class="bigbtn btn-light" onclick="driverAction(this,'Llegada al origen registrada')">Llegué al origen</button>
+          <button class="bigbtn btn-light" onclick="driverAction(this,'Pasajeros a bordo')">Pasajeros a bordo</button>
+          <button class="bigbtn btn-primary" onclick="driverAction(this,'Viaje finalizado')">Finalizar viaje</button>
+        </div>
+        <div id="driverMsg" class="badge blue" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="flota" class="hidden">
+  <div class="section-title">Flota</div>
+  <div class="card">
+    <table>
+      <tr><th>Unidad</th><th>Tipo</th><th>Estado</th><th>Documentación</th></tr>
+      <tr><td>Sprinter 03</td><td>Mercedes-Benz 416</td><td><span class="badge green">Disponible</span></td><td><span class="badge green">OK</span></td></tr>
+      <tr><td>Hiace 05</td><td>Toyota Hiace</td><td><span class="badge blue">En viaje</span></td><td><span class="badge green">OK</span></td></tr>
+      <tr><td>Sprinter 04</td><td>Mercedes-Benz 416</td><td><span class="badge yellow">Disponible</span></td><td><span class="badge yellow">Seguro vence</span></td></tr>
+      <tr><td>Minibús 01</td><td>24 pasajeros</td><td><span class="badge green">Disponible</span></td><td><span class="badge green">OK</span></td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="clientes" class="hidden">
+  <div class="section-title">Clientes</div>
+  <div class="grid">
+    <div class="card"><b>Unipar</b><div class="label" style="margin-top:6px">Servicios activos y programados</div><div class="kpi" style="font-size:22px">12</div></div>
+    <div class="card"><b>Pampa Energía</b><div class="label" style="margin-top:6px">Servicios activos y programados</div><div class="kpi" style="font-size:22px">7</div></div>
+    <div class="card"><b>SACDE</b><div class="label" style="margin-top:6px">Servicios activos y programados</div><div class="kpi" style="font-size:22px">4</div></div>
+    <div class="card"><b>TGS</b><div class="label" style="margin-top:6px">Servicios activos y programados</div><div class="kpi" style="font-size:22px">5</div></div>
+  </div>
+</section>
+
+</div>
+
+<div class="footer">MVP demostrativo · Transporte Rachi · Datos de ejemplo</div>
+
+<script>
+let trips = JSON.parse(localStorage.getItem('rachi_trips') || 'null') || [
+ {hora:'06:00',cliente:'Unipar',origen:'White',destino:'Planta',unidad:'Sprinter 03',chofer:'Mauro G.',estado:'En viaje'},
+ {hora:'07:30',cliente:'Pampa Energía',origen:'Hotel',destino:'Planta',unidad:'Hiace 05',chofer:'Carla R.',estado:'Pendiente'},
+ {hora:'10:00',cliente:'TGS',origen:'Planta',destino:'Aeropuerto',unidad:'Hiace 02',chofer:'Diego M.',estado:'Programado'},
+ {hora:'14:00',cliente:'SACDE',origen:'Base',destino:'Obra',unidad:'Sprinter 07',chofer:'Luis P.',estado:'Programado'}
+];
+
+const drivers=['Mauro G.','Carla R.','Diego M.','Luis P.','Javier S.'];
+const vehicles=['Sprinter 03','Hiace 05','Hiace 02','Sprinter 07','Minibús 01'];
+
+function showTab(id,btn){
+  document.querySelectorAll('section').forEach(s=>s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function badge(e){
+  const cls = e==='En viaje'?'blue':e==='Finalizado'?'green':e==='Pendiente'?'yellow':'blue';
+  return `<span class="badge ${cls}">${e}</span>`;
+}
+
+function render(){
+  const rows=trips.map(t=>`<tr><td>${t.hora}</td><td>${t.cliente}</td><td>${t.origen} → ${t.destino}</td><td>${t.unidad}</td><td>${t.chofer}</td><td>${badge(t.estado)}</td></tr>`).join('');
+  const head='<tr><th>Hora</th><th>Cliente</th><th>Recorrido</th><th>Unidad</th><th>Chofer</th><th>Estado</th></tr>';
+  document.getElementById('tripTable').innerHTML=head+rows;
+  document.getElementById('dashboardTrips').innerHTML=head+rows.slice(0,rows.length);
+  document.getElementById('kpiTrips').innerText=trips.length;
+  localStorage.setItem('rachi_trips',JSON.stringify(trips));
+}
+
+function addTrip(){
+  const c=document.getElementById('cliente').value.trim();
+  const h=document.getElementById('hora').value;
+  const o=document.getElementById('origen').value.trim();
+  const d=document.getElementById('destino').value.trim();
+  const dr=document.getElementById('driver').value;
+  const v=document.getElementById('vehicle').value;
+  if(!c||!h||!o||!d){alert('Completá cliente, hora, origen y destino.');return;}
+  trips.push({hora:h,cliente:c,origen:o,destino:d,unidad:v,chofer:dr,estado:'Programado'});
+  render();
+  ['cliente','hora','origen','destino'].forEach(id=>document.getElementById(id).value='');
+}
+
+function loadDemo(){
+  trips.push({hora:'16:30',cliente:'Puerto',origen:'Ingeniero White',destino:'Bahía Blanca',unidad:'Minibús 01',chofer:'Javier S.',estado:'Pendiente'});
+  render();
+}
+
+function driverAction(btn,msg){
+  const el=document.getElementById('driverMsg');
+  el.innerText=msg;
+  el.style.display='inline-block';
+}
+
+function init(){
+  document.getElementById('driver').innerHTML=drivers.map(x=>`<option>${x}</option>`).join('');
+  document.getElementById('vehicle').innerHTML=vehicles.map(x=>`<option>${x}</option>`).join('');
+  render();
+}
+init();
+</script>
+</body>
+</html>
