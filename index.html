@@ -1,277 +1,71 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Transporte Rachi - MVP</title>
+<meta name="theme-color" content="#13294b"/>
+<title>Transporte Rachi - Gestión</title>
 <style>
-:root{
-  --bg:#0f172a;
-  --panel:#111827;
-  --card:#ffffff;
-  --muted:#64748b;
-  --blue:#2563eb;
-  --green:#16a34a;
-  --yellow:#d97706;
-  --red:#dc2626;
-  --light:#f8fafc;
-  --border:#e2e8f0;
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#eef2f7;color:#0f172a}
-header{
-  background:linear-gradient(135deg,#0f172a,#1e3a5f);
-  color:white;padding:18px 22px;display:flex;justify-content:space-between;align-items:center;
-  position:sticky;top:0;z-index:10
-}
-.brand{font-size:24px;font-weight:800;letter-spacing:.5px}
-.brand span{font-weight:400;font-size:13px;display:block;opacity:.75;margin-top:3px}
-nav{display:flex;gap:8px;flex-wrap:wrap}
-nav button{
-  background:rgba(255,255,255,.08);color:white;border:1px solid rgba(255,255,255,.15);
-  border-radius:10px;padding:10px 13px;cursor:pointer
-}
-nav button.active{background:#2563eb}
-.container{max-width:1250px;margin:0 auto;padding:22px}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.card{background:white;border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:0 4px 14px rgba(15,23,42,.05)}
-.kpi{font-size:30px;font-weight:800;margin-top:6px}
-.label{font-size:13px;color:var(--muted)}
-.section-title{font-size:22px;font-weight:800;margin:4px 0 14px}
-.two{display:grid;grid-template-columns:1.3fr .7fr;gap:16px;margin-top:16px}
-table{width:100%;border-collapse:collapse}
-th,td{padding:11px 9px;text-align:left;border-bottom:1px solid var(--border);font-size:14px}
-th{color:#475569;font-size:12px;text-transform:uppercase}
-.badge{padding:5px 8px;border-radius:999px;font-size:12px;font-weight:700;display:inline-block}
-.green{background:#dcfce7;color:#166534}
-.blue{background:#dbeafe;color:#1d4ed8}
-.yellow{background:#fef3c7;color:#92400e}
-.red{background:#fee2e2;color:#991b1b}
-.btn{border:0;border-radius:10px;padding:10px 13px;cursor:pointer;font-weight:700}
-.btn-primary{background:#2563eb;color:white}
-.btn-success{background:#16a34a;color:white}
-.btn-light{background:#f1f5f9;color:#0f172a}
-.hidden{display:none}
-.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-input,select{
-  width:100%;padding:11px;border-radius:10px;border:1px solid #cbd5e1;background:white
-}
-.actions{display:flex;gap:8px;flex-wrap:wrap}
-.mobile-shell{
-  max-width:420px;margin:0 auto;background:#0f172a;border-radius:28px;padding:10px;
-  box-shadow:0 16px 40px rgba(15,23,42,.2)
-}
-.phone{
-  background:#f8fafc;border-radius:22px;overflow:hidden;min-height:650px
-}
-.phone-top{background:#0f172a;color:white;padding:18px}
-.phone-content{padding:16px}
-.trip{background:white;border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
-.trip h3{margin:0 0 8px}
-.trip p{margin:5px 0;color:#475569;font-size:14px}
-.bigbtn{width:100%;padding:14px;margin-top:8px;border:0;border-radius:11px;font-weight:800;cursor:pointer}
-.map{
-  background:linear-gradient(135deg,#dbeafe,#dcfce7);height:280px;border-radius:15px;
-  display:flex;align-items:center;justify-content:center;color:#334155;font-weight:700;text-align:center;padding:20px
-}
-.alert{padding:10px 0;border-bottom:1px solid var(--border);font-size:14px}
-.footer{padding:30px;text-align:center;color:#64748b;font-size:13px}
-@media(max-width:900px){
-  .grid{grid-template-columns:repeat(2,1fr)}
-  .two{grid-template-columns:1fr}
-}
-@media(max-width:600px){
-  header{align-items:flex-start;gap:15px;flex-direction:column}
-  .grid{grid-template-columns:1fr}
-  .form-grid{grid-template-columns:1fr}
-  .container{padding:14px}
-}
+:root{--navy:#13294b;--navy2:#0b1d35;--yellow:#d99a00;--yellow2:#a86f00;--blue:#2563eb;--green:#16a34a;--red:#dc2626;--light:#f4f7fb;--card:#fff;--muted:#64748b;--border:#e2e8f0}
+*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--light);color:#0f172a}
+header{background:linear-gradient(135deg,var(--navy2),var(--navy));color:#fff;padding:18px 22px;position:sticky;top:0;z-index:20;box-shadow:0 3px 14px rgba(0,0,0,.12)}
+.brand{font-size:24px;font-weight:900;letter-spacing:.5px}.brand span{display:block;font-size:13px;font-weight:400;opacity:.78;margin-top:4px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}nav button{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:11px;padding:10px 14px;font-size:15px}nav button.active{background:var(--yellow);border-color:var(--yellow);color:#111827;font-weight:800}
+.container{max-width:1250px;margin:auto;padding:22px}.section-title{font-size:23px;font-weight:900;margin:4px 0 14px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.two{display:grid;grid-template-columns:1.25fr .75fr;gap:16px;margin-top:16px}
+.card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 5px 18px rgba(15,23,42,.06)}.label{font-size:13px;color:var(--muted)}.kpi{font-size:32px;font-weight:900;margin-top:7px}
+.badge{display:inline-block;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:800}.green{background:#dcfce7;color:#166534}.blue{background:#dbeafe;color:#1d4ed8}.yellow{background:#fef3c7;color:#92400e}.red{background:#fee2e2;color:#991b1b}.gray{background:#e2e8f0;color:#334155}
+.hidden{display:none}.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}input,select,textarea{width:100%;padding:12px;border-radius:11px;border:1px solid #cbd5e1;background:#fff;font-size:16px}textarea{min-height:80px;resize:vertical}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.btn{border:0;border-radius:11px;padding:11px 14px;font-weight:800;font-size:15px}.btn-primary{background:var(--navy);color:#fff}.btn-yellow{background:var(--yellow);color:#111827}.btn-success{background:var(--green);color:#fff}.btn-light{background:#eef2f7;color:#0f172a}.btn-danger{background:#fee2e2;color:#991b1b}
+table{width:100%;border-collapse:collapse}th,td{padding:11px 9px;text-align:left;border-bottom:1px solid var(--border);font-size:14px}th{color:#475569;font-size:12px;text-transform:uppercase}.table-wrap{overflow-x:auto}
+.trip-cards{display:none}.trip-card{background:#fff;border:1px solid var(--border);border-radius:15px;padding:14px;margin-bottom:11px}.trip-card .top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}.trip-card h3{margin:0;font-size:17px}.trip-card p{margin:7px 0;color:#475569;font-size:14px}.trip-card .mini-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.trip-card button{font-size:13px;padding:8px 10px}
+.alert{padding:10px 0;border-bottom:1px solid var(--border);font-size:14px}.map{background:linear-gradient(135deg,#dbeafe,#fff7d6);height:250px;border-radius:15px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:#334155;font-weight:800}
+.mobile-shell{max-width:430px;margin:0 auto;background:var(--navy2);border-radius:28px;padding:10px;box-shadow:0 16px 40px rgba(15,23,42,.2)}.phone{background:#f8fafc;border-radius:22px;overflow:hidden;min-height:650px}.phone-top{background:var(--navy);color:#fff;padding:18px}.phone-content{padding:16px}.driver-trip{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}.driver-trip h3{margin:0 0 8px}.driver-trip p{margin:6px 0;color:#475569;font-size:14px}.bigbtn{width:100%;padding:14px;margin-top:8px;border:0;border-radius:11px;font-weight:900;font-size:15px}
+.filter-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.filter-row>*{flex:1;min-width:150px}.notice{background:#fff7d6;border:1px solid #f3c54b;border-radius:13px;padding:12px 14px;margin-bottom:14px;font-size:14px}.footer{padding:28px;text-align:center;color:#64748b;font-size:13px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}
+@media(max-width:600px){header{padding:18px 16px}.brand{font-size:22px}nav{gap:7px}nav button{padding:9px 12px}.container{padding:14px}.grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.table-wrap{display:none}.trip-cards{display:block}.section-title{font-size:21px}.card{padding:15px}.kpi{font-size:29px}}
 </style>
 </head>
 <body>
-<header>
-  <div class="brand">TRANSPORTE RACHI<span>Sistema de gestión operativa</span></div>
-  <nav>
-    <button class="active" onclick="showTab('panel',this)">Panel</button>
-    <button onclick="showTab('viajes',this)">Viajes</button>
-    <button onclick="showTab('chofer',this)">App Chofer</button>
-    <button onclick="showTab('flota',this)">Flota</button>
-    <button onclick="showTab('clientes',this)">Clientes</button>
-  </nav>
-</header>
-
+<header><div class="brand">TRANSPORTE RACHI<span>Sistema de gestión operativa · V2</span></div><nav>
+<button class="active" onclick="showTab('panel',this)">Panel</button><button onclick="showTab('viajes',this)">Viajes</button><button onclick="showTab('chofer',this)">App Chofer</button><button onclick="showTab('flota',this)">Flota</button><button onclick="showTab('clientes',this)">Clientes</button></nav></header>
 <div class="container">
+<section id="panel"><div class="section-title">Centro de operaciones</div><div class="grid">
+<div class="card"><div class="label">Viajes</div><div class="kpi" id="kpiTrips">0</div></div><div class="card"><div class="label">En curso</div><div class="kpi" id="kpiActive">0</div></div><div class="card"><div class="label">Choferes asignados</div><div class="kpi" id="kpiDrivers">0</div></div><div class="card"><div class="label">Pendientes</div><div class="kpi" id="kpiPending" style="color:var(--yellow2)">0</div></div></div>
+<div class="two"><div class="card"><div class="section-title" style="font-size:18px">Próximos viajes</div><div class="table-wrap"><table id="dashboardTrips"></table></div><div id="dashboardCards" class="trip-cards"></div></div>
+<div class="card"><div class="section-title" style="font-size:18px">Alertas</div><div class="alert">🟡 Seguro Sprinter 04 vence en 5 días</div><div class="alert">🟡 VTV Hiace 06 vence en 10 días</div><div class="alert">🔵 Mantenimiento programado Sprinter 08</div></div></div>
+<div class="card" style="margin-top:16px"><div class="section-title" style="font-size:18px">Mapa operativo</div><div class="map">Ubicación GPS preparada para una próxima etapa<br>Bahía Blanca · Ingeniero White · Parque Industrial</div></div></section>
 
-<section id="panel">
-  <div class="section-title">Centro de operaciones</div>
-  <div class="grid">
-    <div class="card"><div class="label">Viajes hoy</div><div class="kpi" id="kpiTrips">8</div></div>
-    <div class="card"><div class="label">Unidades activas</div><div class="kpi">6</div></div>
-    <div class="card"><div class="label">Choferes en servicio</div><div class="kpi">5</div></div>
-    <div class="card"><div class="label">Alertas</div><div class="kpi" style="color:#dc2626">2</div></div>
-  </div>
+<section id="viajes" class="hidden"><div class="section-title">Gestión de viajes</div><div class="notice"><b>Esta V2 guarda los cambios en este dispositivo.</b> La estructura ya queda preparada para conectar una base de datos central y usuarios reales.</div>
+<div class="card"><div class="form-grid"><div><div class="label">Fecha</div><input id="fecha" type="date"></div><div><div class="label">Hora</div><input id="hora" type="time"></div><div><div class="label">Cliente</div><input id="cliente" placeholder="Ej. Unipar"></div><div><div class="label">Pasajeros</div><input id="pasajeros" type="number" min="1" placeholder="Ej. 11"></div><div><div class="label">Origen</div><input id="origen" placeholder="Ej. Hotel Austral"></div><div><div class="label">Destino</div><input id="destino" placeholder="Ej. Planta"></div><div><div class="label">Chofer</div><select id="driver"></select></div><div><div class="label">Unidad</div><select id="vehicle"></select></div><div style="grid-column:1/-1"><div class="label">Observaciones</div><textarea id="obs" placeholder="Vuelo, contacto, equipaje, espera, etc."></textarea></div></div>
+<div class="actions"><button class="btn btn-yellow" onclick="addTrip()">Crear viaje</button><button class="btn btn-light" onclick="loadDemo()">Agregar demo</button><button class="btn btn-danger" onclick="clearTrips()">Vaciar viajes</button></div></div>
+<div class="card" style="margin-top:16px"><div class="filter-row"><select id="filterStatus" onchange="render()"><option value="">Todos los estados</option><option>Programado</option><option>Aceptado</option><option>En camino</option><option>En origen</option><option>Pasajeros a bordo</option><option>Finalizado</option></select><input id="filterText" oninput="render()" placeholder="Buscar cliente, chofer, unidad..."></div><div class="table-wrap"><table id="tripTable"></table></div><div id="tripCards" class="trip-cards"></div></div></section>
 
-  <div class="two">
-    <div class="card">
-      <div class="section-title" style="font-size:18px">Próximos viajes</div>
-      <table id="dashboardTrips"></table>
-    </div>
-    <div class="card">
-      <div class="section-title" style="font-size:18px">Alertas</div>
-      <div class="alert">🟡 Seguro Sprinter 04 vence en 5 días</div>
-      <div class="alert">🟡 VTV Hiace 06 vence en 10 días</div>
-      <div class="alert">🔴 Chofer sin apto médico actualizado</div>
-      <div class="alert">🔵 Mantenimiento programado Sprinter 08</div>
-    </div>
-  </div>
+<section id="chofer" class="hidden"><div class="section-title">App del chofer</div><div class="mobile-shell"><div class="phone"><div class="phone-top"><div style="font-weight:900;font-size:19px">TRANSPORTE RACHI</div><div style="opacity:.78;margin-top:4px">Servicios asignados</div></div><div class="phone-content"><div class="label" style="margin-bottom:8px">Seleccionar chofer</div><select id="driverView" onchange="renderDriver()" style="margin-bottom:14px"></select><div id="driverTrips"></div></div></div></div></section>
 
-  <div class="card" style="margin-top:16px">
-    <div class="section-title" style="font-size:18px">Mapa en tiempo real</div>
-    <div class="map">Mapa GPS simulado<br/>Bahía Blanca / Ingeniero White / Parque Industrial<br/><br/>En una versión productiva se integraría Google Maps, Mapbox o similar.</div>
-  </div>
-</section>
-
-<section id="viajes" class="hidden">
-  <div class="section-title">Gestión de viajes</div>
-  <div class="card">
-    <div class="form-grid">
-      <div><div class="label">Cliente</div><input id="cliente" placeholder="Ej. Unipar"></div>
-      <div><div class="label">Hora</div><input id="hora" type="time"></div>
-      <div><div class="label">Origen</div><input id="origen" placeholder="Ej. Hotel Austral"></div>
-      <div><div class="label">Destino</div><input id="destino" placeholder="Ej. Planta"></div>
-      <div><div class="label">Chofer</div><select id="driver"></select></div>
-      <div><div class="label">Unidad</div><select id="vehicle"></select></div>
-    </div>
-    <div class="actions" style="margin-top:14px">
-      <button class="btn btn-primary" onclick="addTrip()">Crear viaje</button>
-      <button class="btn btn-light" onclick="loadDemo()">Cargar demo</button>
-    </div>
-  </div>
-  <div class="card" style="margin-top:16px">
-    <table id="tripTable"></table>
-  </div>
-</section>
-
-<section id="chofer" class="hidden">
-  <div class="section-title">App del chofer</div>
-  <div class="mobile-shell">
-    <div class="phone">
-      <div class="phone-top">
-        <div style="font-weight:800;font-size:19px">TRANSPORTE RACHI</div>
-        <div style="opacity:.75;margin-top:4px">Hola, Mauro</div>
-      </div>
-      <div class="phone-content">
-        <div class="label" style="margin-bottom:10px">Próximo servicio</div>
-        <div class="trip">
-          <h3>Viaje #4582 <span class="badge green">Asignado</span></h3>
-          <p><b>Cliente:</b> Unipar</p>
-          <p><b>Hora:</b> 06:00</p>
-          <p><b>Origen:</b> White - Hotel Austral</p>
-          <p><b>Destino:</b> Planta Unipar</p>
-          <p><b>Pasajeros:</b> 11</p>
-          <p><b>Unidad:</b> Sprinter 416</p>
-          <button class="bigbtn btn-success" onclick="driverAction(this,'Viaje iniciado')">Iniciar viaje</button>
-          <button class="bigbtn btn-light" onclick="driverAction(this,'Llegada al origen registrada')">Llegué al origen</button>
-          <button class="bigbtn btn-light" onclick="driverAction(this,'Pasajeros a bordo')">Pasajeros a bordo</button>
-          <button class="bigbtn btn-primary" onclick="driverAction(this,'Viaje finalizado')">Finalizar viaje</button>
-        </div>
-        <div id="driverMsg" class="badge blue" style="display:none"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="flota" class="hidden">
-  <div class="section-title">Flota</div>
-  <div class="card">
-    <table>
-      <tr><th>Unidad</th><th>Tipo</th><th>Estado</th><th>Documentación</th></tr>
-      <tr><td>Sprinter 03</td><td>Mercedes-Benz 416</td><td><span class="badge green">Disponible</span></td><td><span class="badge green">OK</span></td></tr>
-      <tr><td>Hiace 05</td><td>Toyota Hiace</td><td><span class="badge blue">En viaje</span></td><td><span class="badge green">OK</span></td></tr>
-      <tr><td>Sprinter 04</td><td>Mercedes-Benz 416</td><td><span class="badge yellow">Disponible</span></td><td><span class="badge yellow">Seguro vence</span></td></tr>
-      <tr><td>Minibús 01</td><td>24 pasajeros</td><td><span class="badge green">Disponible</span></td><td><span class="badge green">OK</span></td></tr>
-    </table>
-  </div>
-</section>
-
-<section id="clientes" class="hidden">
-  <div class="section-title">Clientes</div>
-  <div class="grid">
-    <div class="card"><b>Unipar</b><div class="label" style="margin-top:6px">Servicios activos y programados</div><div class="kpi" style="font-size:22px">12</div></div>
-    <div class="card"><b>Pampa Energía</b><div class="label" style="margin-top:6px">Servicios activos y programados</div><div class="kpi" style="font-size:22px">7</div></div>
-    <div class="card"><b>SACDE</b><div class="label" style="margin-top:6px">Servicios activos y programados</div><div class="kpi" style="font-size:22px">4</div></div>
-    <div class="card"><b>TGS</b><div class="label" style="margin-top:6px">Servicios activos y programados</div><div class="kpi" style="font-size:22px">5</div></div>
-  </div>
-</section>
-
-</div>
-
-<div class="footer">MVP demostrativo · Transporte Rachi · Datos de ejemplo</div>
-
+<section id="flota" class="hidden"><div class="section-title">Flota</div><div class="card"><div class="table-wrap" style="display:block"><table><tr><th>Unidad</th><th>Tipo</th><th>Estado</th><th>Documentación</th></tr><tr><td>Sprinter 03</td><td>Mercedes-Benz 416</td><td><span class="badge green">Disponible</span></td><td><span class="badge green">OK</span></td></tr><tr><td>Hiace 05</td><td>Toyota Hiace</td><td><span class="badge blue">En viaje</span></td><td><span class="badge green">OK</span></td></tr><tr><td>Sprinter 04</td><td>Mercedes-Benz 416</td><td><span class="badge yellow">Disponible</span></td><td><span class="badge yellow">Seguro vence</span></td></tr><tr><td>Minibús 01</td><td>24 pasajeros</td><td><span class="badge green">Disponible</span></td><td><span class="badge green">OK</span></td></tr></table></div></div></section>
+<section id="clientes" class="hidden"><div class="section-title">Clientes</div><div class="grid"><div class="card"><b>Unipar</b><div class="label" style="margin-top:6px">Servicios</div><div class="kpi" style="font-size:22px">12</div></div><div class="card"><b>Pampa Energía</b><div class="label" style="margin-top:6px">Servicios</div><div class="kpi" style="font-size:22px">7</div></div><div class="card"><b>Consorcio del Puerto</b><div class="label" style="margin-top:6px">Servicios</div><div class="kpi" style="font-size:22px">4</div></div><div class="card"><b>TGS</b><div class="label" style="margin-top:6px">Servicios</div><div class="kpi" style="font-size:22px">5</div></div></div></section>
+</div><div class="footer">Transporte Rachi · V2 operativa · Datos guardados localmente</div>
 <script>
-let trips = JSON.parse(localStorage.getItem('rachi_trips') || 'null') || [
- {hora:'06:00',cliente:'Unipar',origen:'White',destino:'Planta',unidad:'Sprinter 03',chofer:'Mauro G.',estado:'En viaje'},
- {hora:'07:30',cliente:'Pampa Energía',origen:'Hotel',destino:'Planta',unidad:'Hiace 05',chofer:'Carla R.',estado:'Pendiente'},
- {hora:'10:00',cliente:'TGS',origen:'Planta',destino:'Aeropuerto',unidad:'Hiace 02',chofer:'Diego M.',estado:'Programado'},
- {hora:'14:00',cliente:'SACDE',origen:'Base',destino:'Obra',unidad:'Sprinter 07',chofer:'Luis P.',estado:'Programado'}
-];
-
 const drivers=['Mauro G.','Carla R.','Diego M.','Luis P.','Javier S.'];
 const vehicles=['Sprinter 03','Hiace 05','Hiace 02','Sprinter 07','Minibús 01'];
-
-function showTab(id,btn){
-  document.querySelectorAll('section').forEach(s=>s.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
-  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  render();
-}
-
-function badge(e){
-  const cls = e==='En viaje'?'blue':e==='Finalizado'?'green':e==='Pendiente'?'yellow':'blue';
-  return `<span class="badge ${cls}">${e}</span>`;
-}
-
-function render(){
-  const rows=trips.map(t=>`<tr><td>${t.hora}</td><td>${t.cliente}</td><td>${t.origen} → ${t.destino}</td><td>${t.unidad}</td><td>${t.chofer}</td><td>${badge(t.estado)}</td></tr>`).join('');
-  const head='<tr><th>Hora</th><th>Cliente</th><th>Recorrido</th><th>Unidad</th><th>Chofer</th><th>Estado</th></tr>';
-  document.getElementById('tripTable').innerHTML=head+rows;
-  document.getElementById('dashboardTrips').innerHTML=head+rows.slice(0,rows.length);
-  document.getElementById('kpiTrips').innerText=trips.length;
-  localStorage.setItem('rachi_trips',JSON.stringify(trips));
-}
-
-function addTrip(){
-  const c=document.getElementById('cliente').value.trim();
-  const h=document.getElementById('hora').value;
-  const o=document.getElementById('origen').value.trim();
-  const d=document.getElementById('destino').value.trim();
-  const dr=document.getElementById('driver').value;
-  const v=document.getElementById('vehicle').value;
-  if(!c||!h||!o||!d){alert('Completá cliente, hora, origen y destino.');return;}
-  trips.push({hora:h,cliente:c,origen:o,destino:d,unidad:v,chofer:dr,estado:'Programado'});
-  render();
-  ['cliente','hora','origen','destino'].forEach(id=>document.getElementById(id).value='');
-}
-
-function loadDemo(){
-  trips.push({hora:'16:30',cliente:'Puerto',origen:'Ingeniero White',destino:'Bahía Blanca',unidad:'Minibús 01',chofer:'Javier S.',estado:'Pendiente'});
-  render();
-}
-
-function driverAction(btn,msg){
-  const el=document.getElementById('driverMsg');
-  el.innerText=msg;
-  el.style.display='inline-block';
-}
-
-function init(){
-  document.getElementById('driver').innerHTML=drivers.map(x=>`<option>${x}</option>`).join('');
-  document.getElementById('vehicle').innerHTML=vehicles.map(x=>`<option>${x}</option>`).join('');
-  render();
-}
-init();
-</script>
-</body>
-</html>
+const demo=[
+{id:4582,fecha:new Date().toISOString().slice(0,10),hora:'06:00',cliente:'Unipar',origen:'White',destino:'Planta',unidad:'Sprinter 03',chofer:'Mauro G.',pasajeros:11,estado:'En camino',obs:''},
+{id:4583,fecha:new Date().toISOString().slice(0,10),hora:'07:30',cliente:'Pampa Energía',origen:'Hotel',destino:'Planta',unidad:'Hiace 05',chofer:'Carla R.',pasajeros:6,estado:'Programado',obs:''},
+{id:4584,fecha:new Date().toISOString().slice(0,10),hora:'10:00',cliente:'TGS',origen:'Planta',destino:'Aeropuerto',unidad:'Hiace 02',chofer:'Diego M.',pasajeros:4,estado:'Aceptado',obs:'Vuelo de línea'},
+{id:4585,fecha:new Date().toISOString().slice(0,10),hora:'14:00',cliente:'Consorcio del Puerto',origen:'Base',destino:'Puerto',unidad:'Sprinter 07',chofer:'Luis P.',pasajeros:9,estado:'Programado',obs:''}
+];
+let trips=JSON.parse(localStorage.getItem('rachi_v2_trips')||'null')||demo;
+function save(){localStorage.setItem('rachi_v2_trips',JSON.stringify(trips))}
+function esc(s=''){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function showTab(id,btn){document.querySelectorAll('section').forEach(s=>s.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render()}
+function badge(e){let cls={Finalizado:'green','En camino':'blue','En origen':'blue','Pasajeros a bordo':'blue',Aceptado:'green',Programado:'yellow'}[e]||'gray';return `<span class="badge ${cls}">${esc(e)}</span>`}
+function filtered(){let st=document.getElementById('filterStatus')?.value||'';let q=(document.getElementById('filterText')?.value||'').toLowerCase();return trips.filter(t=>(!st||t.estado===st)&&(!q||Object.values(t).join(' ').toLowerCase().includes(q))).sort((a,b)=>(a.fecha+a.hora).localeCompare(b.fecha+b.hora))}
+function row(t){return `<tr><td>${esc(t.fecha)}</td><td>${esc(t.hora)}</td><td>${esc(t.cliente)}</td><td>${esc(t.origen)} → ${esc(t.destino)}</td><td>${esc(t.unidad)}</td><td>${esc(t.chofer)}</td><td>${badge(t.estado)}</td></tr>`}
+function card(t,editable=false){return `<div class="trip-card"><div class="top"><h3>${esc(t.hora)} · ${esc(t.cliente)}</h3>${badge(t.estado)}</div><p><b>${esc(t.origen)}</b> → <b>${esc(t.destino)}</b></p><p>🚐 ${esc(t.unidad)} · 👤 ${esc(t.chofer)} · 👥 ${esc(t.pasajeros||'-')}</p>${t.obs?`<p>📝 ${esc(t.obs)}</p>`:''}${editable?`<div class="mini-actions"><button class="btn btn-light" onclick="setStatus(${t.id},'Aceptado')">Aceptar</button><button class="btn btn-primary" onclick="setStatus(${t.id},'En camino')">En camino</button><button class="btn btn-light" onclick="setStatus(${t.id},'En origen')">En origen</button><button class="btn btn-light" onclick="setStatus(${t.id},'Pasajeros a bordo')">A bordo</button><button class="btn btn-success" onclick="setStatus(${t.id},'Finalizado')">Finalizar</button></div>`:''}</div>`}
+function render(){let f=filtered();let head='<tr><th>Fecha</th><th>Hora</th><th>Cliente</th><th>Recorrido</th><th>Unidad</th><th>Chofer</th><th>Estado</th></tr>';document.getElementById('tripTable').innerHTML=head+f.map(row).join('');document.getElementById('tripCards').innerHTML=f.map(t=>card(t,false)).join('')||'<div class="label">No hay viajes.</div>';let dash=[...trips].sort((a,b)=>(a.fecha+a.hora).localeCompare(b.fecha+b.hora)).slice(0,6);document.getElementById('dashboardTrips').innerHTML=head+dash.map(row).join('');document.getElementById('dashboardCards').innerHTML=dash.map(t=>card(t,false)).join('');document.getElementById('kpiTrips').innerText=trips.length;document.getElementById('kpiActive').innerText=trips.filter(t=>['En camino','En origen','Pasajeros a bordo'].includes(t.estado)).length;document.getElementById('kpiDrivers').innerText=new Set(trips.filter(t=>t.estado!=='Finalizado').map(t=>t.chofer)).size;document.getElementById('kpiPending').innerText=trips.filter(t=>t.estado==='Programado').length;save();renderDriver()}
+function addTrip(){let ids=['fecha','hora','cliente','origen','destino'];let vals=Object.fromEntries(ids.map(id=>[id,document.getElementById(id).value.trim()]));if(ids.some(id=>!vals[id])){alert('Completá fecha, hora, cliente, origen y destino.');return}trips.push({id:Date.now(),...vals,unidad:vehicle.value,chofer:driver.value,pasajeros:pasajeros.value||'',estado:'Programado',obs:obs.value.trim()});['hora','cliente','origen','destino','pasajeros','obs'].forEach(id=>document.getElementById(id).value='');render();alert('Viaje creado y asignado.')}
+function loadDemo(){trips.push({id:Date.now(),fecha:new Date().toISOString().slice(0,10),hora:'16:30',cliente:'Puerto',origen:'Ingeniero White',destino:'Bahía Blanca',unidad:'Minibús 01',chofer:'Javier S.',pasajeros:14,estado:'Programado',obs:'Servicio agregado como demo'});render()}
+function clearTrips(){if(confirm('¿Vaciar todos los viajes guardados en este dispositivo?')){trips=[];render()}}
+function setStatus(id,status){let t=trips.find(x=>x.id===id);if(t){t.estado=status;save();render();}}
+function renderDriver(){let name=document.getElementById('driverView')?.value||drivers[0];let list=trips.filter(t=>t.chofer===name&&t.estado!=='Finalizado').sort((a,b)=>(a.fecha+a.hora).localeCompare(b.fecha+b.hora));let box=document.getElementById('driverTrips');if(box)box.innerHTML=list.length?list.map(t=>card(t,true)).join(''):'<div class="driver-trip"><b>Sin servicios pendientes</b><p>No hay viajes asignados para este chofer.</p></div>'}
+function init(){driver.innerHTML=drivers.map(x=>`<option>${x}</option>`).join('');vehicle.innerHTML=vehicles.map(x=>`<option>${x}</option>`).join('');driverView.innerHTML=drivers.map(x=>`<option>${x}</option>`).join('');fecha.value=new Date().toISOString().slice(0,10);render()}init();
+</script></body></html>
