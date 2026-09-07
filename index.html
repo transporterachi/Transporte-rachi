@@ -930,8 +930,9 @@ async function logout(){
   await sb.auth.signOut();
   location.reload();
 }
-sb
-  .channel('viajes-tiempo-real')
+function suscribirRealtime(){
+  return sb
+    .channel('viajes-tiempo-real')
   .on(
     'postgres_changes',
     {
@@ -1015,9 +1016,14 @@ aviso.innerHTML = `
 }
   )
   .subscribe();
+}
 (async()=>{
   const {data}=await sb.auth.getSession();
-  if(data.session) await iniciar(data.session.user);
+
+  if(data.session){
+    await iniciar(data.session.user);
+    suscribirRealtime();
+  }
 })();
 </script>
 
