@@ -140,6 +140,22 @@ textarea{min-height:80px}
     <div id="error"></div>
   </div>
 </section>
+  <section id="recovery" style="display:none;min-height:100vh;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#102b54,#1d4678)">
+  <div class="loginbox">
+    <div class="loginlogo">TRANSPORTE RACHI <span>V3</span></div>
+    <p class="muted">Crear nueva contraseña</p>
+
+    <label>Nueva contraseña</label>
+    <input id="newPassword" type="password" placeholder="Nueva contraseña">
+
+    <label>Repetir contraseña</label>
+    <input id="repeatPassword" type="password" placeholder="Repetir contraseña">
+
+    <button class="primary" onclick="guardarNuevaPassword()">GUARDAR CONTRASEÑA</button>
+
+    <div id="recoveryError" style="color:#d83434;margin-top:14px"></div>
+  </div>
+</section>
 
 <div id="app">
 <header>
@@ -258,7 +274,15 @@ const SUPABASE_URL = 'https://lfwrujvuliimbpehftf.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_r5eZRfZu7oVyB9hC6Aiz9w_c_Ne_idL';
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const esRecuperacion =
+  window.location.hash.includes('type=recovery') ||
+  window.location.search.includes('type=recovery');
 
+if(esRecuperacion){
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').style.display='none';
+  document.getElementById('recovery').style.display='flex';
+}
 let viajes=[];
 let vehiculos=[];
 let choferes=[];
@@ -440,7 +464,42 @@ function showPage(id,btn){
   document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));
   if(btn) btn.classList.add('active');
 }
+async function guardarNuevaPassword(){
+  const p1 = document.getElementById('newPassword').value;
+  const p2 = document.getElementById('repeatPassword').value;
+  const msg = document.getElementById('recoveryError');
 
+  msg.style.color = '#d83434';
+  msg.textContent = '';
+
+  if(p1.length < 8){
+    msg.textContent = 'La contraseña debe tener al menos 8 caracteres.';
+    return;
+  }
+
+  if(p1 !== p2){
+    msg.textContent = 'Las contraseñas no coinciden.';
+    return;
+  }
+
+  const { error } = await sb.auth.updateUser({
+    password: p1
+  });
+
+  if(error){
+    msg.textContent = 'No se pudo cambiar la contraseña: ' + error.message;
+    return;
+  }
+
+  msg.style.color = '#168754';
+  msg.textContent = 'Contraseña actualizada correctamente.';
+
+  await sb.auth.signOut();
+
+  setTimeout(() => {
+    window.location.href = window.location.origin + window.location.pathname;
+  }, 1200);
+}
 async function logout(){
   await sb.auth.signOut();
   location.reload();
