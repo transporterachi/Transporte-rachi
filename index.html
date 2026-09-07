@@ -921,7 +921,13 @@ async function iniciarViaje(id){
     alert('No se pudo iniciar el viaje: ' + error.message);
     return;
   }
-
+await sb.functions.invoke('enviar-push', {
+  body: {
+    user_id: '57858101-09aa-4805-8120-e9740b2ca511',
+    title: '🚐 Viaje iniciado',
+    body: 'Un chofer inició un viaje'
+  }
+});
   await cargarViajesChofer();
 }
 
