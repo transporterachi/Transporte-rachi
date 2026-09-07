@@ -580,10 +580,21 @@ listaChoferes.innerHTML=choferes.map(c=>{
     <div class="row">
       <strong>${c.nombre}</strong>
       <div class="muted">${c.telefono||''}</div>
+
       <div style="margin-top:6px;font-weight:700">
         ${usuario && usuario.activo
           ? '🟢 Usuario activo'
-          : '🔴 Sin usuario'}
+          : `
+            🔴 Sin usuario
+            <br>
+            <button
+              class="primary"
+              style="margin-top:8px"
+              onclick="crearAccesoChofer('${c.id}','${c.nombre}')"
+            >
+              CREAR ACCESO
+            </button>
+          `}
       </div>
     </div>
   `;
@@ -760,6 +771,45 @@ async function guardarNuevaPassword(){
   setTimeout(() => {
     window.location.href = window.location.origin + window.location.pathname;
   }, 1200);
+}
+  async function crearAccesoChofer(choferId, nombre){
+  const password = prompt(
+    'Creá una contraseña provisoria para ' + nombre + ' (mínimo 8 caracteres):'
+  );
+
+  if(!password) return;
+
+  if(password.length < 8){
+    alert('La contraseña debe tener al menos 8 caracteres.');
+    return;
+  }
+
+  const confirmar = confirm(
+    '¿Crear acceso para ' + nombre + '?'
+  );
+
+  if(!confirmar) return;
+
+  const { data, error } = await sb.functions.invoke('crear-acceso-chofer', {
+    body: {
+      chofer_id: choferId,
+      password: password
+    }
+  });
+
+  if(error){
+    alert('No se pudo crear el acceso: ' + error.message);
+    return;
+  }
+
+  if(data?.error){
+    alert('No se pudo crear el acceso: ' + data.error);
+    return;
+  }
+
+  alert('Acceso creado correctamente para ' + nombre);
+
+  await cargarDatos();
 }
   async function cancelarViaje(id){
   const confirmar = confirm('¿Seguro que querés cancelar este viaje?');
