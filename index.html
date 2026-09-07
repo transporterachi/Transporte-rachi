@@ -551,10 +551,13 @@ mFinalizadosHoy.textContent=viajes.filter(
   x=>x.estado==='finalizado' && x.fecha===hoy
 ).length;
 
-  proximos.innerHTML=viajes.length
-    ? viajes.slice(0,5).map(cardViaje).join('')
-    : '<div class="card empty">Todavía no hay viajes cargados.</div>';
+  const proximosViajes = viajes
+  .filter(v => v.estado === 'pendiente' || v.estado === 'confirmado')
+  .slice(0,5);
 
+proximos.innerHTML = proximosViajes.length
+  ? proximosViajes.map(cardViaje).join('')
+  : '<div class="card empty">No hay próximos viajes.</div>';
   listaViajes.innerHTML=viajes.length
     ? viajes.map(cardViaje).join('')
     : '<div class="card empty">Todavía no hay viajes cargados.</div>';
