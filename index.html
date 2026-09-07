@@ -934,6 +934,7 @@ body: v ? `🕐 ${String(v.hora).slice(0,5)} · ${v.origen} → ${v.destino}` : 
 }
 
 async function finalizarViaje(id){
+  const v = viajesChoferActuales.find(x => x.id === id);
   const {error} = await sb.rpc('finalizar_viaje', { p_viaje: id });
 
   if(error){
@@ -943,8 +944,8 @@ async function finalizarViaje(id){
 await sb.functions.invoke('enviar-push', {
   body: {
     user_id: '57858101-09aa-4805-8120-e9740b2ca511',
-    title: '🏁 Viaje finalizado',
-    body: 'Un chofer finalizó un viaje'
+    title: `🏁 ${perfil.nombre} finalizó el viaje`,
+body: v ? `🕐 ${String(v.hora).slice(0,5)} · ${v.origen} → ${v.destino}` : 'Viaje finalizado'
   }
 });
   await cargarViajesChofer();
