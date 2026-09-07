@@ -316,6 +316,7 @@ let viajes=[];
 let vehiculos=[];
 let choferes=[];
 let clientes=[];
+let perfiles=[];
 let perfil=null;
 let viajesChoferActuales = [];
 async function login(){
@@ -490,17 +491,19 @@ document.getElementById('misViajes').innerHTML = html;
 
 }
 async function cargarDatos(){
-  const [v,c,f,cl]=await Promise.all([
+  const [v,c,f,cl,p]=await Promise.all([
     sb.from('viajes').select('*').order('fecha',{ascending:true}).order('hora',{ascending:true}),
     sb.from('choferes').select('*').order('nombre'),
     sb.from('vehiculos').select('*').order('vehiculo'),
-    sb.from('clientes').select('*').order('nombre')
+    sb.from('clientes').select('*').order('nombre'),
+    sb.from('perfiles').select('nombre, rol, chofer_id, activo')
   ]);
 
   viajes=v.data||[];
   choferes=c.data||[];
   vehiculos=f.data||[];
   clientes=cl.data||[];
+  perfiles=p.data||[];
 
   rellenarSelects();
   render();
@@ -570,16 +573,21 @@ proximos.innerHTML = proximosViajes.length
     </div>
   `).join('');
 
-  listaChoferes.innerHTML=choferes.map(c=>`
+listaChoferes.innerHTML=choferes.map(c=>{
+  const usuario = perfiles.find(p => p.chofer_id === c.id && p.rol === 'chofer');
+
+  return `
     <div class="row">
       <strong>${c.nombre}</strong>
       <div class="muted">${c.telefono||''}</div>
+      <div style="margin-top:6px;font-weight:700">
+        ${usuario && usuario.activo
+          ? '🟢 Usuario activo'
+          : '🔴 Sin usuario'}
+      </div>
     </div>
-  `).join('');
-
-  listaClientes.innerHTML=clientes.map(c=>`
-    <div class="row"><strong>${c.nombre}</strong></div>
-  `).join('');
+  `;
+}).join('');
 }
 
 function cardViaje(v){
