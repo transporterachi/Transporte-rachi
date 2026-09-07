@@ -934,15 +934,32 @@ sb
       schema: 'public',
       table: 'viajes'
     },
-    async () => {
-      if(!perfil) return;
+   async (payload) => {
+  if(!perfil) return;
 
-      if(perfil.rol === 'chofer'){
-        await cargarViajesChofer();
-      }else{
-        await cargarDatos();
-      }
+  if(perfil.rol === 'chofer'){
+    await cargarViajesChofer();
+
+    if(
+      payload.eventType === 'INSERT' &&
+      payload.new &&
+      payload.new.chofer_id === perfil.chofer_id &&
+      payload.new.estado === 'pendiente'
+    ){
+      const aviso = document.getElementById('avisoChofer');
+
+      aviso.style.display = 'block';
+      aviso.textContent = '🚐 ¡Tenés un nuevo viaje asignado!';
+
+      setTimeout(() => {
+        aviso.style.display = 'none';
+      }, 10000);
     }
+
+  }else{
+    await cargarDatos();
+  }
+}
   )
   .subscribe();
 (async()=>{
