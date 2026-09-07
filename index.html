@@ -904,7 +904,13 @@ async function guardarNuevaPassword(){
     alert('No se pudo aceptar el viaje: ' + error.message);
     return;
   }
-
+await sb.functions.invoke('enviar-push', {
+  body: {
+    user_id: '57858101-09aa-4805-8120-e9740b2ca511',
+    title: '✅ Viaje aceptado',
+    body: 'Un chofer aceptó un viaje asignado'
+  }
+});
   await cargarViajesChofer();
 }
 
