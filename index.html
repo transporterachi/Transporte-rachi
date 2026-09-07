@@ -991,6 +991,13 @@ aviso.innerHTML = `
   ){
     alert('✅ El chofer aceptó el viaje');
   }
+    if(
+  payload.eventType === 'UPDATE' &&
+  payload.new &&
+  payload.new.estado === 'en_viaje'
+){
+  alert('🚐 El chofer inició el viaje');
+}
 }
 }
   )
