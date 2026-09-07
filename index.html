@@ -1032,6 +1032,14 @@ registro.showNotification(
     payload.new.estado === 'en_viaje'
   ){
    alert(`🚐 ${nombreChofer(payload.new.chofer_id)} inició el viaje\n🕐 ${String(payload.new.hora).slice(0,5)} · ${payload.new.origen} → ${payload.new.destino}`);
+    const registro = await navigator.serviceWorker.ready;
+
+registro.showNotification(
+  `🚐 ${nombreChofer(payload.new.chofer_id)} inició el viaje`,
+  {
+    body: `🕐 ${String(payload.new.hora).slice(0,5)} · ${payload.new.origen} → ${payload.new.destino}`
+  }
+);
   }
 
   if(
@@ -1040,6 +1048,14 @@ registro.showNotification(
     payload.new.estado === 'finalizado'
   ){
     alert(`🏁 ${nombreChofer(payload.new.chofer_id)} finalizó el viaje\n🕐 ${String(payload.new.hora).slice(0,5)} · ${payload.new.origen} → ${payload.new.destino}`);
+    const registro = await navigator.serviceWorker.ready;
+
+registro.showNotification(
+  `🏁 ${nombreChofer(payload.new.chofer_id)} finalizó el viaje`,
+  {
+    body: `🕐 ${String(payload.new.hora).slice(0,5)} · ${payload.new.origen} → ${payload.new.destino}`
+  }
+);
   }
 
   await cargarDatos();
