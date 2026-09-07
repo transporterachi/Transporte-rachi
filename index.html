@@ -284,7 +284,7 @@ textarea{min-height:80px}
     <section class="page active">
       <h1>Mis viajes</h1>
       <p class="muted">Servicios que tenés asignados</p>
-
+<div id="avisoChofer" class="card" style="display:none;margin-bottom:15px;font-weight:700"></div>
       <div id="misViajes"></div>
     </section>
   </main>
@@ -381,7 +381,19 @@ async function cargarViajesChofer(){
   }
 
   const lista = data || [];
+const pendientes = lista.filter(v => v.estado === 'pendiente').length;
+const aviso = document.getElementById('avisoChofer');
 
+if(pendientes > 0){
+  aviso.style.display = 'block';
+  aviso.textContent =
+    pendientes === 1
+      ? 'Tenés 1 viaje nuevo pendiente'
+      : `Tenés ${pendientes} viajes nuevos pendientes`;
+}else{
+  aviso.style.display = 'none';
+  aviso.textContent = '';
+}
   if(lista.length === 0){
     document.getElementById('misViajes').innerHTML =
       '<div class="card">No tenés viajes asignados.</div>';
