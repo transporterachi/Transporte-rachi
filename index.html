@@ -365,7 +365,11 @@ async function cargarViajesChofer(){
 
   const {data,error} = await sb
     .from('viajes')
-    .select('*')
+    .select(`
+  *,
+  clientes(nombre),
+  vehiculos(vehiculo, patente)
+`)
     .eq('chofer_id', perfil.chofer_id)
     .order('fecha',{ascending:true})
     .order('hora',{ascending:true});
@@ -388,10 +392,26 @@ async function cargarViajesChofer(){
     <div class="card" style="margin-bottom:15px">
       <h2>${v.fecha} · ${String(v.hora).slice(0,5)}</h2>
 
-      <p><strong>Origen:</strong> ${v.origen}</p>
-      <p><strong>Destino:</strong> ${v.destino}</p>
-      <p><strong>Pasajeros:</strong> ${v.pasajeros}</p>
+    <p><strong>Cliente:</strong> ${v.clientes?.nombre || 'Sin cliente'}</p>
 
+<p><strong>Origen:</strong> ${v.origen}</p>
+<p><strong>Destino:</strong> ${v.destino}</p>
+<p><strong>Pasajeros:</strong> ${v.pasajeros}</p>
+
+<p>
+  <strong>Vehículo:</strong>
+  ${v.vehiculos?.vehiculo || 'Sin vehículo'}
+  ${v.vehiculos?.patente ? ' · ' + v.vehiculos.patente : ''}
+</p>
+<a
+  class="primary"
+  style="display:inline-block;text-decoration:none;margin-top:8px"
+  href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(v.destino)}"
+  target="_blank"
+  rel="noopener"
+>
+  ABRIR EN GOOGLE MAPS
+</a>
       ${v.observaciones ?
         `<p><strong>Observaciones:</strong> ${v.observaciones}</p>` : ''}
 
