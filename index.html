@@ -948,12 +948,35 @@ sb
     ){
       const aviso = document.getElementById('avisoChofer');
 
-      aviso.style.display = 'block';
-      aviso.textContent = '🚐 ¡Tenés un nuevo viaje asignado!';
+     const viajeNuevo = payload.new;
 
-      setTimeout(() => {
-        aviso.style.display = 'none';
-      }, 10000);
+aviso.style.display = 'block';
+
+aviso.innerHTML = `
+  <div style="font-size:18px;margin-bottom:8px">
+    🚐 <strong>NUEVO VIAJE ASIGNADO</strong>
+  </div>
+
+  <div>
+    <strong>${viajeNuevo.fecha} · ${String(viajeNuevo.hora).slice(0,5)}</strong>
+  </div>
+
+  <div style="margin-top:5px">
+    ${viajeNuevo.origen} → ${viajeNuevo.destino}
+  </div>
+
+  <div style="margin-top:5px">
+    ${viajeNuevo.pasajeros} pasajero${viajeNuevo.pasajeros == 1 ? '' : 's'}
+  </div>
+
+  <button
+    class="primary"
+    style="margin-top:10px"
+    onclick="aceptarViaje('${viajeNuevo.id}')"
+  >
+    ACEPTAR VIAJE
+  </button>
+`;
     }
 
   }else{
