@@ -773,7 +773,7 @@ delete tripForm.dataset.editando;
   tripForm.reset();
   pasajeros.value=1;
   toggleForm();
-  await cargarDatos();
+  
 });
 
 function showPage(id,btn){
@@ -1002,10 +1002,12 @@ aviso.innerHTML = `
       if(
   payload.eventType === 'UPDATE' &&
   payload.new &&
-  payload.new.estado === 'finalizado'
+ payload.new.estado === 'finalizado'
 ){
   alert('🏁 El chofer finalizó el viaje');
 }
+
+await cargarDatos();
 }
 }
   )
