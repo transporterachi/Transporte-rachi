@@ -1002,20 +1002,6 @@ async function logout(){
   alert('🔔 Dispositivo registrado para recibir notificaciones');
 }
 
-  const permiso = await Notification.requestPermission();
-
-  if(permiso === 'granted'){
-  const registro = await navigator.serviceWorker.ready;
-
-  await registro.showNotification('Transporte Rachi', {
-    body: '🔔 Notificaciones funcionando correctamente'
-  });
-
-  alert('🔔 Notificaciones activadas correctamente');
-}else{
-  alert('No se habilitaron las notificaciones.');
-}
-}
 function suscribirRealtime(){
   return sb
     .channel('viajes-tiempo-real')
