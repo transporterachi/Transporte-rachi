@@ -992,7 +992,7 @@ aviso.innerHTML = `
     payload.new &&
     payload.new.estado === 'confirmado'
   ){
-    alert('✅ El chofer aceptó el viaje');
+   alert(`✅ ${nombreChofer(payload.new.chofer_id)} aceptó el viaje`);
   }
 
   if(
@@ -1000,7 +1000,7 @@ aviso.innerHTML = `
     payload.new &&
     payload.new.estado === 'en_viaje'
   ){
-    alert('🚐 El chofer inició el viaje');
+   alert(`🚐 ${nombreChofer(payload.new.chofer_id)} inició el viaje`);
   }
 
   if(
@@ -1008,7 +1008,7 @@ aviso.innerHTML = `
     payload.new &&
     payload.new.estado === 'finalizado'
   ){
-    alert('🏁 El chofer finalizó el viaje');
+    alert(`🏁 ${nombreChofer(payload.new.chofer_id)} finalizó el viaje`);
   }
 
   await cargarDatos();
