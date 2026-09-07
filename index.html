@@ -320,8 +320,8 @@ async function iniciar(user){
 
   perfil=p;
 
-  login.style.display='none';
-  app.style.display='block';
+document.getElementById('login').style.display='none';
+document.getElementById('app').style.display='block';
 
   usuarioActual.textContent =
     perfil.nombre+' · '+perfil.rol.toUpperCase();
