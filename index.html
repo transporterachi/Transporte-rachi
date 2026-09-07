@@ -361,6 +361,44 @@ async function iniciar(user){
 document.getElementById('login').style.display='none';
 
 if(perfil.rol === 'chofer'){
+  if(perfil.cambiar_password){
+  const nueva = prompt(
+    'Es tu primer ingreso. Creá una nueva contraseña de al menos 8 caracteres:'
+  );
+
+  if(!nueva || nueva.length < 8){
+    alert('Debés crear una contraseña de al menos 8 caracteres.');
+    await sb.auth.signOut();
+    window.location.reload();
+    return;
+  }
+
+  const {error: errorClave} = await sb.auth.updateUser({
+    password: nueva
+  });
+
+  if(errorClave){
+    alert('No se pudo cambiar la contraseña: ' + errorClave.message);
+    await sb.auth.signOut();
+    window.location.reload();
+    return;
+  }
+
+  const {error: errorPerfil} = await sb
+    .from('perfiles')
+    .update({cambiar_password:false})
+    .eq('id',perfil.id);
+
+  if(errorPerfil){
+    alert('La contraseña cambió, pero no se pudo completar la activación.');
+    await sb.auth.signOut();
+    window.location.reload();
+    return;
+  }
+
+  perfil.cambiar_password=false;
+  alert('Contraseña creada correctamente.');
+}
   document.getElementById('app').style.display='none';
   document.getElementById('choferApp').style.display='block';
 
