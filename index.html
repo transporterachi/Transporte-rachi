@@ -186,6 +186,13 @@ textarea{min-height:80px}
 <div class="card metric"><span>Confirmados</span><strong id="mConfirmados">0</strong></div>
 <div class="card metric"><span>En viaje</span><strong id="mEnViaje">0</strong></div>
 <div class="card metric"><span>Finalizados hoy</span><strong id="mFinalizadosHoy">0</strong></div>
+ 
+  <h2 style="margin-top:30px">🚐 Viajes en curso</h2>
+<div id="viajesEnCurso"></div>
+
+  <h2 style="margin-top:30px">🚐 Viajes en curso</h2>
+<div id="viajesEnCurso"></div>
+  
   <h2 style="margin-top:30px">Próximos viajes</h2>
   <div id="proximos"></div>
 </section>
@@ -534,6 +541,11 @@ function render(){
 
 mEnViaje.textContent=viajes.filter(x=>x.estado==='en_viaje').length;
 
+  const enCurso = viajes.filter(x=>x.estado==='en_viaje');
+
+viajesEnCurso.innerHTML = enCurso.length
+  ? enCurso.map(cardViaje).join('')
+  : '<div class="card empty">No hay viajes en curso.</div>';
 const hoy = new Date().toLocaleDateString('en-CA');
 
 mFinalizadosHoy.textContent=viajes.filter(
