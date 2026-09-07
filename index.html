@@ -183,7 +183,9 @@ textarea{min-height:80px}
     <div class="card metric"><span>Choferes activos</span><strong id="mChoferes">0</strong></div>
     <div class="card metric"><span>Pendientes</span><strong id="mPendientes">0</strong></div>
   </div>
-
+<div class="card metric"><span>Confirmados</span><strong id="mConfirmados">0</strong></div>
+<div class="card metric"><span>En viaje</span><strong id="mEnViaje">0</strong></div>
+<div class="card metric"><span>Finalizados hoy</span><strong id="mFinalizadosHoy">0</strong></div>
   <h2 style="margin-top:30px">Próximos viajes</h2>
   <div id="proximos"></div>
 </section>
@@ -526,6 +528,15 @@ function render(){
   mFlota.textContent=vehiculos.filter(x=>x.activo).length;
   mChoferes.textContent=choferes.filter(x=>x.activo).length;
   mPendientes.textContent=viajes.filter(x=>x.estado==='pendiente').length;
+  mConfirmados.textContent=viajes.filter(x=>x.estado==='confirmado').length;
+
+mEnViaje.textContent=viajes.filter(x=>x.estado==='en_viaje').length;
+
+const hoy = new Date().toLocaleDateString('en-CA');
+
+mFinalizadosHoy.textContent=viajes.filter(
+  x=>x.estado==='finalizado' && x.fecha===hoy
+).length;
 
   proximos.innerHTML=viajes.length
     ? viajes.slice(0,5).map(cardViaje).join('')
