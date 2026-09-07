@@ -1,27 +1,456 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102b4e"><title>Transporte Rachi V2</title>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Transporte Rachi e Hijos</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-:root{--n:#102b4e;--n2:#173b67;--y:#d9a514;--bg:#eef2f7;--mut:#6b7788;--green:#198754;--red:#dc3545}
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#142033}header{background:linear-gradient(135deg,var(--n),var(--n2));color:white;padding:24px 18px 18px;position:sticky;top:0;z-index:5}.brand{font-size:28px;font-weight:800}.sub{color:#d8e1ec;margin-top:4px}.v2{color:#ffd34e;font-size:12px}nav{display:flex;gap:8px;overflow:auto;margin-top:18px}nav button{border:1px solid #ffffff33;background:#ffffff0d;color:white;padding:11px 15px;border-radius:14px;font-size:15px;white-space:nowrap}nav button.active{background:var(--y);color:#172033;font-weight:bold}main{max-width:1000px;margin:auto;padding:22px 16px 70px}.page{display:none}.page.active{display:block}h1{font-size:27px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:white;border:1px solid #dfe5ec;border-radius:20px;padding:20px;margin-bottom:12px;box-shadow:0 8px 24px #1e293b0b}.metric span,.muted,small{color:var(--mut)}.metric strong{font-size:36px;display:block;margin-top:8px}.toolbar,.row{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.primary,.secondary,.danger,.statusbtn{border:0;border-radius:12px;padding:12px 16px;font-weight:700}.primary{background:var(--y)}.secondary{background:#e8eef6;color:var(--n)}.danger{background:#ffe6e8;color:#a71925}.statusbtn{background:var(--n);color:white}.trip{display:grid;grid-template-columns:90px 1fr auto;gap:14px;align-items:center}.time{font-size:23px;font-weight:800;color:var(--n)}.badge{display:inline-block;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:800}.pendiente{background:#fff2bf;color:#795b00}.confirmado{background:#dbeafe;color:#174ea6}.en-viaje{background:#dcfce7;color:#116b38}.finalizado{background:#e5e7eb;color:#374151}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.modal{display:none;position:fixed;inset:0;background:#0f172a99;z-index:20;padding:20px;overflow:auto}.modal.open{display:block}.modalbox{max-width:680px;margin:30px auto;background:white;border-radius:20px;padding:22px}form{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{font-size:13px;color:var(--mut);font-weight:700}input,select,textarea{width:100%;margin-top:5px;padding:12px;border:1px solid #cfd7e3;border-radius:10px;font-size:16px}.full{grid-column:1/-1}.empty{text-align:center;color:var(--mut);padding:30px}.driverHero{border-left:6px solid var(--y)}footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
-@media(max-width:700px){.grid{grid-template-columns:1fr 1fr}.trip{grid-template-columns:70px 1fr}.trip>div:last-child{grid-column:2}form{grid-template-columns:1fr}.full{grid-column:auto}}
-</style></head><body>
-<header><div class="brand">TRANSPORTE RACHI <span class="v2">V2</span></div><div class="sub">Sistema de gestión operativa</div><nav><button data-p="panel" class="active">Panel</button><button data-p="viajes">Viajes</button><button data-p="chofer">App Chofer</button><button data-p="flota">Flota</button><button data-p="clientes">Clientes</button></nav></header>
+:root{
+  --azul:#142f5b;
+  --azul2:#1d4678;
+  --dorado:#d9a900;
+  --oliva:#8a862c;
+  --fondo:#eef2f7;
+  --blanco:#fff;
+  --texto:#10203a;
+  --gris:#68758a;
+  --verde:#168754;
+  --rojo:#d83434;
+  --borde:#dce3ec;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--fondo);color:var(--texto)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+
+header{
+  background:linear-gradient(135deg,var(--azul),var(--azul2));
+  color:white;
+  padding:20px 24px;
+}
+.brand{font-size:29px;font-weight:900}
+.brand span{color:var(--dorado);font-size:13px}
+.sub{margin-top:5px;color:#d6dfec}
+.userbar{margin-top:12px;font-size:14px;color:#e7edf6}
+
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+nav button{
+  border:1px solid rgba(255,255,255,.22);
+  background:rgba(255,255,255,.06);
+  color:white;padding:10px 16px;border-radius:14px
+}
+nav button.active{background:var(--dorado);color:#09152a;font-weight:bold}
+
+main{max-width:1080px;margin:auto;padding:28px 20px 80px}
+.page{display:none}
+.page.active{display:block}
+h1{margin-top:0}
+
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.card{
+  background:white;border:1px solid var(--borde);
+  border-radius:20px;padding:20px;
+  box-shadow:0 6px 18px rgba(20,47,91,.05)
+}
+.metric span{display:block;color:var(--gris)}
+.metric strong{display:block;font-size:38px;margin-top:10px}
+
+.toolbar{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;margin-bottom:16px;flex-wrap:wrap
+}
+.primary{
+  background:var(--azul);color:white;border:0;
+  padding:11px 16px;border-radius:12px;font-weight:bold
+}
+.secondary{
+  background:white;color:var(--azul);border:1px solid var(--borde);
+  padding:10px 14px;border-radius:12px
+}
+.danger{background:var(--rojo);color:white;border:0;padding:9px 13px;border-radius:10px}
+
+.row{
+  background:white;border:1px solid var(--borde);
+  border-radius:17px;padding:16px;margin:10px 0
+}
+.row strong{font-size:17px}
+.muted{color:var(--gris);font-size:14px}
+.badge{
+  display:inline-block;padding:5px 9px;border-radius:999px;
+  background:#fff0b3;font-size:12px;font-weight:bold
+}
+.badge.confirmado{background:#d9e8ff;color:#1451a3}
+.badge.en_viaje{background:#d6f5e4;color:#087541}
+.badge.finalizado{background:#e2e7ee;color:#4c5969}
+
+form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{font-size:13px;font-weight:bold}
+label span{display:block;margin-bottom:5px}
+input,select,textarea{
+  width:100%;padding:11px;border:1px solid #ccd5e1;border-radius:10px;background:white
+}
+.full{grid-column:1/-1}
+textarea{min-height:80px}
+.empty{padding:28px;text-align:center;color:var(--gris)}
+
+#login{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:20px;background:linear-gradient(135deg,#102b54,#1d4678)
+}
+.loginbox{
+  width:min(430px,100%);background:white;border-radius:24px;
+  padding:30px;box-shadow:0 18px 50px rgba(0,0,0,.25)
+}
+.loginlogo{font-size:28px;font-weight:900;color:var(--azul)}
+.loginlogo span{color:var(--dorado)}
+.loginbox input{margin-top:6px;margin-bottom:14px}
+.loginbox button{width:100%;margin-top:8px}
+#error{color:var(--rojo);margin-top:14px;font-size:14px}
+
+#app{display:none}
+
+@media(max-width:750px){
+  .grid{grid-template-columns:1fr 1fr}
+  form{grid-template-columns:1fr}
+  .full{grid-column:auto}
+}
+@media(max-width:480px){
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<section id="login">
+  <div class="loginbox">
+    <div class="loginlogo">TRANSPORTE RACHI <span>V3</span></div>
+    <p class="muted">Sistema de gestión operativa</p>
+
+    <label>Correo electrónico</label>
+    <input id="email" type="email" placeholder="usuario@correo.com">
+
+    <label>Contraseña</label>
+    <input id="password" type="password" placeholder="••••••••">
+
+    <button class="primary" onclick="login()">INGRESAR</button>
+    <div id="error"></div>
+  </div>
+</section>
+
+<div id="app">
+<header>
+  <div class="brand">TRANSPORTE RACHI E HIJOS <span>V3</span></div>
+  <div class="sub">Sistema de gestión operativa</div>
+  <div class="userbar" id="usuarioActual"></div>
+
+  <nav>
+    <button class="active" onclick="showPage('panel',this)">Panel</button>
+    <button onclick="showPage('viajes',this)">Viajes</button>
+    <button onclick="showPage('flota',this)">Flota</button>
+    <button onclick="showPage('clientes',this)">Clientes</button>
+    <button onclick="logout()">Salir</button>
+  </nav>
+</header>
+
 <main>
-<section id="panel" class="page active"><h1>Centro de operaciones</h1><div class="grid"><div class="card metric"><span>Viajes hoy</span><strong id="mTrips">0</strong></div><div class="card metric"><span>Unidades activas</span><strong id="mFleet">0</strong></div><div class="card metric"><span>Choferes asignados</span><strong id="mDrivers">0</strong></div><div class="card metric"><span>Alertas</span><strong id="mAlerts">0</strong></div></div><h2>Próximos viajes</h2><div id="panelTrips"></div></section>
-<section id="viajes" class="page"><div class="toolbar"><h1>Viajes</h1><button class="primary" onclick="openTrip()">＋ Nuevo viaje</button></div><div id="tripList"></div></section>
-<section id="chofer" class="page"><h1>App Chofer</h1><div class="card driverHero"><div class="muted">Vista de prueba del chofer</div><h2 id="driverTitle">Sin servicios</h2><div id="driverTrip"></div></div></section>
-<section id="flota" class="page"><div class="toolbar"><h1>Flota</h1><button class="primary" onclick="openM('fleetModal')">＋ Unidad</button></div><div id="fleetList"></div></section>
-<section id="clientes" class="page"><div class="toolbar"><h1>Clientes</h1><button class="primary" onclick="openM('clientModal')">＋ Cliente</button></div><div id="clientList"></div></section>
-</main><footer>Transporte Rachi · MVP V2 · Los datos se guardan en este dispositivo</footer>
-<div id="tripModal" class="modal"><div class="modalbox"><div class="toolbar"><h2>Nuevo viaje</h2><button class="secondary" onclick="closeM('tripModal')">Cerrar</button></div><form id="tripForm"><label>Fecha<input type="date" id="tdate" required></label><label>Hora<input type="time" id="ttime" required></label><label>Cliente<select id="tclient" required></select></label><label>Pasajeros<input type="number" id="tpax" min="1" value="1"></label><label class="full">Origen<input id="torigin" required></label><label class="full">Destino<input id="tdest" required></label><label>Chofer<input id="tdriver" placeholder="Nombre"></label><label>Vehículo<select id="tvehicle"></select></label><label class="full">Observaciones<textarea id="tnotes"></textarea></label><div class="full"><button class="primary">Guardar viaje</button></div></form></div></div>
-<div id="fleetModal" class="modal"><div class="modalbox"><h2>Nueva unidad</h2><form id="fleetForm"><label>Vehículo<input id="fv" required placeholder="Toyota Hiace 2025"></label><label>Patente<input id="fp" required></label><div class="full"><button class="primary">Guardar</button> <button type="button" class="secondary" onclick="closeM('fleetModal')">Cancelar</button></div></form></div></div>
-<div id="clientModal" class="modal"><div class="modalbox"><h2>Nuevo cliente</h2><form id="clientForm"><label>Empresa / Cliente<input id="cn" required></label><label>Contacto<input id="cc"></label><div class="full"><button class="primary">Guardar</button> <button type="button" class="secondary" onclick="closeM('clientModal')">Cancelar</button></div></form></div></div>
+
+<section id="panel" class="page active">
+  <h1>Centro de operaciones</h1>
+
+  <div class="grid">
+    <div class="card metric"><span>Viajes</span><strong id="mViajes">0</strong></div>
+    <div class="card metric"><span>Unidades activas</span><strong id="mFlota">0</strong></div>
+    <div class="card metric"><span>Choferes activos</span><strong id="mChoferes">0</strong></div>
+    <div class="card metric"><span>Pendientes</span><strong id="mPendientes">0</strong></div>
+  </div>
+
+  <h2 style="margin-top:30px">Próximos viajes</h2>
+  <div id="proximos"></div>
+</section>
+
+<section id="viajes" class="page">
+  <div class="toolbar">
+    <h1>Viajes</h1>
+    <button class="primary" onclick="toggleForm()">+ Nuevo viaje</button>
+  </div>
+
+  <div id="nuevoViaje" class="card" style="display:none;margin-bottom:20px">
+    <h2>Nuevo viaje</h2>
+
+    <form id="tripForm">
+      <label>
+        <span>Fecha</span>
+        <input id="fecha" type="date" required>
+      </label>
+
+      <label>
+        <span>Hora</span>
+        <input id="hora" type="time" required>
+      </label>
+
+      <label>
+        <span>Cliente</span>
+        <select id="cliente" required></select>
+      </label>
+
+      <label>
+        <span>Pasajeros</span>
+        <input id="pasajeros" type="number" min="1" value="1" required>
+      </label>
+
+      <label>
+        <span>Origen</span>
+        <input id="origen" required>
+      </label>
+
+      <label>
+        <span>Destino</span>
+        <input id="destino" required>
+      </label>
+
+      <label>
+        <span>Chofer</span>
+        <select id="chofer"></select>
+      </label>
+
+      <label>
+        <span>Vehículo</span>
+        <select id="vehiculo"></select>
+      </label>
+
+      <label class="full">
+        <span>Observaciones</span>
+        <textarea id="observaciones"></textarea>
+      </label>
+
+      <div class="full">
+        <button class="primary" type="submit">Guardar viaje</button>
+        <button class="secondary" type="button" onclick="toggleForm()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="listaViajes"></div>
+</section>
+
+<section id="flota" class="page">
+  <h1>Flota</h1>
+  <div id="listaFlota"></div>
+
+  <h2 style="margin-top:30px">Choferes</h2>
+  <div id="listaChoferes"></div>
+</section>
+
+<section id="clientes" class="page">
+  <h1>Clientes</h1>
+  <div id="listaClientes"></div>
+</section>
+
+</main>
+</div>
+
 <script>
-const K='rachi_v2';let db=JSON.parse(localStorage.getItem(K)||'null')||{trips:[],fleet:[{name:'Toyota Hiace 2025',plate:'AH002GH'},{name:'Toyota Hiace 2024',plate:'AG777YZ'},{name:'Mercedes-Benz Sprinter 416',plate:'AF142MW'}],clients:[{name:'Unipar',contact:''},{name:'Pampa Energía',contact:''},{name:'Consorcio Puerto Bahía Blanca',contact:''}]};
-const $=id=>document.getElementById(id),esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));function save(){localStorage.setItem(K,JSON.stringify(db));render()}function openM(id){$(id).classList.add('open')}function closeM(id){$(id).classList.remove('open')}
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button,.page').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.p).classList.add('active');render()});
-function fill(){tclient.innerHTML=db.clients.map(x=>`<option>${esc(x.name)}</option>`).join('');tvehicle.innerHTML='<option value="">Sin asignar</option>'+db.fleet.map(x=>`<option>${esc(x.name)} · ${esc(x.plate)}</option>`).join('')}function openTrip(){fill();tdate.value=new Date().toISOString().slice(0,10);openM('tripModal')}
-tripForm.onsubmit=e=>{e.preventDefault();db.trips.unshift({id:Date.now(),date:tdate.value,time:ttime.value,client:tclient.value,pax:tpax.value,origin:torigin.value,dest:tdest.value,driver:tdriver.value,vehicle:tvehicle.value,notes:tnotes.value,status:'Pendiente'});e.target.reset();closeM('tripModal');save()};
-fleetForm.onsubmit=e=>{e.preventDefault();db.fleet.push({name:fv.value,plate:fp.value.toUpperCase()});e.target.reset();closeM('fleetModal');save()};clientForm.onsubmit=e=>{e.preventDefault();db.clients.push({name:cn.value,contact:cc.value});e.target.reset();closeM('clientModal');save()};
-function cls(s){return s.toLowerCase().replace(' ','-')}function trip(t,admin=true){return `<div class="card trip"><div class="time">${esc(t.time)}</div><div><strong>${esc(t.client)}</strong><br>${esc(t.origin)} → ${esc(t.dest)}<br><small>${esc(t.date)} · ${esc(t.pax)} pax · ${esc(t.driver||'Chofer sin asignar')}<br>${esc(t.vehicle||'Vehículo sin asignar')}</small></div><div><span class="badge ${cls(t.status)}">${esc(t.status)}</span>${admin?`<div class="actions"><button class="danger" onclick="delTrip(${t.id})">Eliminar</button></div>`:''}</div></div>`}function delTrip(id){if(confirm('¿Eliminar este viaje?')){db.trips=db.trips.filter(t=>t.id!==id);save()}}function next(id){let a=['Pendiente','Confirmado','En viaje','Finalizado'],t=db.trips.find(x=>x.id===id),i=a.indexOf(t.status);if(i<a.length-1)t.status=a[i+1];save()}
-function render(){let today=new Date().toISOString().slice(0,10);mTrips.textContent=db.trips.filter(t=>t.date===today).length;mFleet.textContent=db.fleet.length;mDrivers.textContent=new Set(db.trips.filter(t=>t.date===today&&t.driver).map(t=>t.driver)).size;mAlerts.textContent=db.trips.filter(t=>t.status==='Pendiente'&&t.date<=today).length;panelTrips.innerHTML=db.trips.slice(0,4).map(t=>trip(t,false)).join('')||'<div class="card empty">Todavía no hay viajes. Creá el primero desde “Viajes”.</div>';tripList.innerHTML=db.trips.map(t=>trip(t)).join('')||'<div class="card empty">No hay viajes cargados.</div>';fleetList.innerHTML=db.fleet.map(x=>`<div class="card row"><div><strong>${esc(x.name)}</strong><br><span class="muted">${esc(x.plate)}</span></div><span class="badge en-viaje">Activa</span></div>`).join('');clientList.innerHTML=db.clients.map(x=>`<div class="card"><strong>${esc(x.name)}</strong><br><span class="muted">${esc(x.contact||'Sin contacto cargado')}</span></div>`).join('');let t=db.trips.find(x=>x.status!=='Finalizado');if(!t){driverTitle.textContent='Sin servicios asignados';driverTrip.innerHTML='<div class="muted">Cuando asignes un viaje aparecerá aquí.</div>'}else{driverTitle.textContent=`${t.time} · ${t.client}`;let L={Pendiente:'ACEPTAR VIAJE',Confirmado:'INICIAR VIAJE','En viaje':'FINALIZAR'};driverTrip.innerHTML=`<p><strong>${esc(t.origin)} → ${esc(t.dest)}</strong></p><p>${esc(t.date)} · ${esc(t.pax)} pasajeros<br>${esc(t.vehicle||'Vehículo sin asignar')}<br>Chofer: ${esc(t.driver||'Sin asignar')}</p><span class="badge ${cls(t.status)}">${esc(t.status)}</span>${L[t.status]?`<div class="actions"><button class="statusbtn" onclick="next(${t.id})">${L[t.status]}</button></div>`:''}`}}render();
-</script></body></html>
+const SUPABASE_URL = 'https://lfwrujvuliimbpehftf.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_r5eZRfZu7oVyB9hC6Aiz9w_c_Ne_idL';
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let viajes=[];
+let vehiculos=[];
+let choferes=[];
+let clientes=[];
+let perfil=null;
+
+async function login(){
+  error.textContent='';
+
+  const {data, error:err}=await sb.auth.signInWithPassword({
+    email:email.value.trim(),
+    password:password.value
+  });
+
+  if(err){
+    error.textContent='Correo o contraseña incorrectos.';
+    return;
+  }
+
+  await iniciar(data.user);
+}
+
+async function iniciar(user){
+  const {data:p,error:e}=await sb
+    .from('perfiles')
+    .select('*')
+    .eq('auth_user_id',user.id)
+    .single();
+
+  if(e || !p){
+    await sb.auth.signOut();
+    error.textContent='Este usuario no tiene un perfil autorizado.';
+    return;
+  }
+
+  perfil=p;
+
+  login.style.display='none';
+  app.style.display='block';
+
+  usuarioActual.textContent =
+    perfil.nombre+' · '+perfil.rol.toUpperCase();
+
+  await cargarDatos();
+}
+
+async function cargarDatos(){
+  const [v,c,f,cl]=await Promise.all([
+    sb.from('viajes').select('*').order('fecha',{ascending:true}).order('hora',{ascending:true}),
+    sb.from('choferes').select('*').order('nombre'),
+    sb.from('vehiculos').select('*').order('vehiculo'),
+    sb.from('clientes').select('*').order('nombre')
+  ]);
+
+  viajes=v.data||[];
+  choferes=c.data||[];
+  vehiculos=f.data||[];
+  clientes=cl.data||[];
+
+  rellenarSelects();
+  render();
+}
+
+function rellenarSelects(){
+  cliente.innerHTML =
+    '<option value="">Seleccionar...</option>'+
+    clientes.map(x=>`<option value="${x.id}">${x.nombre}</option>`).join('');
+
+  chofer.innerHTML =
+    '<option value="">Sin asignar</option>'+
+    choferes.map(x=>`<option value="${x.id}">${x.nombre}</option>`).join('');
+
+  vehiculo.innerHTML =
+    '<option value="">Sin asignar</option>'+
+    vehiculos.map(x=>`<option value="${x.id}">${x.vehiculo} · ${x.patente}</option>`).join('');
+}
+
+function nombreCliente(id){
+  return clientes.find(x=>x.id===id)?.nombre||'Sin cliente';
+}
+function nombreChofer(id){
+  return choferes.find(x=>x.id===id)?.nombre||'Sin asignar';
+}
+function nombreVehiculo(id){
+  const x=vehiculos.find(v=>v.id===id);
+  return x ? `${x.vehiculo} · ${x.patente}` : 'Sin asignar';
+}
+
+function render(){
+  mViajes.textContent=viajes.length;
+  mFlota.textContent=vehiculos.filter(x=>x.activo).length;
+  mChoferes.textContent=choferes.filter(x=>x.activo).length;
+  mPendientes.textContent=viajes.filter(x=>x.estado==='pendiente').length;
+
+  proximos.innerHTML=viajes.length
+    ? viajes.slice(0,5).map(cardViaje).join('')
+    : '<div class="card empty">Todavía no hay viajes cargados.</div>';
+
+  listaViajes.innerHTML=viajes.length
+    ? viajes.map(cardViaje).join('')
+    : '<div class="card empty">Todavía no hay viajes cargados.</div>';
+
+  listaFlota.innerHTML=vehiculos.map(v=>`
+    <div class="row">
+      <strong>${v.vehiculo}</strong>
+      <div>${v.patente}</div>
+      <div class="muted">Año ${v.anio} · Capacidad ${v.capacidad} pasajeros</div>
+    </div>
+  `).join('');
+
+  listaChoferes.innerHTML=choferes.map(c=>`
+    <div class="row">
+      <strong>${c.nombre}</strong>
+      <div class="muted">${c.telefono||''}</div>
+    </div>
+  `).join('');
+
+  listaClientes.innerHTML=clientes.map(c=>`
+    <div class="row"><strong>${c.nombre}</strong></div>
+  `).join('');
+}
+
+function cardViaje(v){
+  return `
+    <div class="row">
+      <div class="toolbar">
+        <div>
+          <strong>${v.fecha} · ${String(v.hora).slice(0,5)} · ${nombreCliente(v.cliente_id)}</strong>
+          <div>${v.origen} → ${v.destino}</div>
+          <div class="muted">
+            ${v.pasajeros} pasajeros · ${nombreChofer(v.chofer_id)}<br>
+            ${nombreVehiculo(v.vehiculo_id)}
+          </div>
+        </div>
+        <span class="badge ${v.estado}">${v.estado.replace('_',' ')}</span>
+      </div>
+    </div>
+  `;
+}
+
+function toggleForm(){
+  nuevoViaje.style.display =
+    nuevoViaje.style.display==='none' ? 'block' : 'none';
+}
+
+tripForm.addEventListener('submit',async e=>{
+  e.preventDefault();
+
+  const nuevo={
+    fecha:fecha.value,
+    hora:hora.value,
+    cliente_id:cliente.value||null,
+    origen:origen.value.trim(),
+    destino:destino.value.trim(),
+    pasajeros:Number(pasajeros.value),
+    chofer_id:chofer.value||null,
+    vehiculo_id:vehiculo.value||null,
+    observaciones:observaciones.value.trim()||null,
+    estado:'pendiente'
+  };
+
+  const {error}=await sb.from('viajes').insert(nuevo);
+
+  if(error){
+    alert('No se pudo guardar el viaje: '+error.message);
+    return;
+  }
+
+  tripForm.reset();
+  pasajeros.value=1;
+  toggleForm();
+  await cargarDatos();
+});
+
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+
+  document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+async function logout(){
+  await sb.auth.signOut();
+  location.reload();
+}
+
+(async()=>{
+  const {data}=await sb.auth.getSession();
+  if(data.session) await iniciar(data.session.user);
+})();
+</script>
+
+</body>
+</html>
