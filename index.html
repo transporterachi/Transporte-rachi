@@ -486,23 +486,47 @@ function render(){
 }
 
 function cardViaje(v){
+  const horaAceptado = v.hora_aceptado
+    ? new Date(v.hora_aceptado).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})
+    : '--:--';
+
+  const horaInicio = v.hora_inicio
+    ? new Date(v.hora_inicio).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})
+    : '--:--';
+
+  const horaFinalizacion = v.hora_finalizacion
+    ? new Date(v.hora_finalizacion).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})
+    : '--:--';
+
   return `
     <div class="row">
       <div class="toolbar">
         <div>
           <strong>${v.fecha} · ${String(v.hora).slice(0,5)} · ${nombreCliente(v.cliente_id)}</strong>
+
           <div>${v.origen} → ${v.destino}</div>
+
           <div class="muted">
             ${v.pasajeros} pasajeros · ${nombreChofer(v.chofer_id)}<br>
             ${nombreVehiculo(v.vehiculo_id)}
           </div>
+
+          <div style="margin-top:10px;font-size:13px">
+            <strong>Aceptado:</strong> ${horaAceptado}
+            &nbsp; | &nbsp;
+            <strong>Inicio:</strong> ${horaInicio}
+            &nbsp; | &nbsp;
+            <strong>Finalizado:</strong> ${horaFinalizacion}
+          </div>
         </div>
-        <span class="badge ${v.estado}">${v.estado.replace('_',' ')}</span>
+
+        <span class="badge ${v.estado}">
+          ${v.estado.replace('_',' ')}
+        </span>
       </div>
     </div>
   `;
 }
-
 function toggleForm(){
   nuevoViaje.style.display =
     nuevoViaje.style.display==='none' ? 'block' : 'none';
