@@ -520,12 +520,49 @@ function cardViaje(v){
           </div>
         </div>
 
-        <span class="badge ${v.estado}">
-          ${v.estado.replace('_',' ')}
-        </span>
+       <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+
+  <span class="badge ${v.estado}">
+    ${v.estado.replace('_',' ')}
+  </span>
+
+  ${v.estado !== 'finalizado' && v.estado !== 'cancelado' ? `
+    <button class="secondary" onclick="editarViaje('${v.id}')">
+      EDITAR
+    </button>
+
+    <button class="secondary" onclick="cancelarViaje('${v.id}')">
+      CANCELAR
+    </button>
+  ` : ''}
+
+</div>
       </div>
     </div>
   `;
+}
+  function editarViaje(id){
+  const v = viajes.find(x => x.id === id);
+  if(!v) return;
+
+  fecha.value = v.fecha;
+  hora.value = String(v.hora).slice(0,5);
+  cliente.value = v.cliente_id || '';
+  pasajeros.value = v.pasajeros || 1;
+  origen.value = v.origen || '';
+  destino.value = v.destino || '';
+  chofer.value = v.chofer_id || '';
+  vehiculo.value = v.vehiculo_id || '';
+  observaciones.value = v.observaciones || '';
+
+  tripForm.dataset.editando = id;
+
+  nuevoViaje.style.display = 'block';
+
+  window.scrollTo({
+    top: document.getElementById('nuevoViaje').offsetTop - 20,
+    behavior: 'smooth'
+  });
 }
 function toggleForm(){
   nuevoViaje.style.display =
@@ -548,13 +585,28 @@ tripForm.addEventListener('submit',async e=>{
     estado:'pendiente'
   };
 
-  const {error}=await sb.from('viajes').insert(nuevo);
+ let error;
+
+if(tripForm.dataset.editando){
+  const resultado = await sb
+    .from('viajes')
+    .update(nuevo)
+    .eq('id', tripForm.dataset.editando);
+
+  error = resultado.error;
+}else{
+  const resultado = await sb
+    .from('viajes')
+    .insert(nuevo);
+
+  error = resultado.error;
+}
 
   if(error){
     alert('No se pudo guardar el viaje: '+error.message);
     return;
   }
-
+delete tripForm.dataset.editando;
   tripForm.reset();
   pasajeros.value=1;
   toggleForm();
@@ -603,6 +655,23 @@ async function guardarNuevaPassword(){
   setTimeout(() => {
     window.location.href = window.location.origin + window.location.pathname;
   }, 1200);
+}
+  async function cancelarViaje(id){
+  const confirmar = confirm('¿Seguro que querés cancelar este viaje?');
+
+  if(!confirmar) return;
+
+  const {error} = await sb
+    .from('viajes')
+    .update({estado:'cancelado'})
+    .eq('id',id);
+
+  if(error){
+    alert('No se pudo cancelar el viaje: ' + error.message);
+    return;
+  }
+
+  await cargarDatos();
 }
   async function aceptarViaje(id){
   const {error} = await sb.rpc('aceptar_viaje', { p_viaje: id });
