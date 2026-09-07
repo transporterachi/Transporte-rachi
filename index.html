@@ -170,6 +170,7 @@ textarea{min-height:80px}
     <button onclick="showPage('viajes',this)">Viajes</button>
     <button onclick="showPage('flota',this)">Flota</button>
     <button onclick="showPage('clientes',this)">Clientes</button>
+    <button onclick="activarNotificaciones()">🔔 Notificaciones</button>
     <button onclick="logout()">Salir</button>
   </nav>
 </header>
@@ -931,6 +932,20 @@ async function finalizarViaje(id){
 async function logout(){
   await sb.auth.signOut();
   location.reload();
+}
+  async function activarNotificaciones(){
+  if(!('Notification' in window)){
+    alert('Este dispositivo no admite notificaciones.');
+    return;
+  }
+
+  const permiso = await Notification.requestPermission();
+
+  if(permiso === 'granted'){
+    alert('🔔 Notificaciones activadas correctamente');
+  }else{
+    alert('No se habilitaron las notificaciones.');
+  }
 }
 function suscribirRealtime(){
   return sb
