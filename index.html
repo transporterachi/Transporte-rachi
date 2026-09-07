@@ -581,7 +581,7 @@ async function guardarNuevaPassword(){
   }, 1200);
 }
   async function aceptarViaje(id){
-  const {error} = await sb.rpc('aceptar_viaje', { p_viaje_id: id });
+  const {error} = await sb.rpc('aceptar_viaje', { p_viaje: id });
 
   if(error){
     alert('No se pudo aceptar el viaje: ' + error.message);
@@ -592,7 +592,7 @@ async function guardarNuevaPassword(){
 }
 
 async function iniciarViaje(id){
-  const {error} = await sb.rpc('iniciar_viaje', { p_viaje_id: id });
+  const {error} = await sb.rpc('iniciar_viaje', { p_viaje: id });
 
   if(error){
     alert('No se pudo iniciar el viaje: ' + error.message);
@@ -603,7 +603,7 @@ async function iniciarViaje(id){
 }
 
 async function finalizarViaje(id){
-  const {error} = await sb.rpc('finalizar_viaje', { p_viaje_id: id });
+  const {error} = await sb.rpc('finalizar_viaje', { p_viaje: id });
 
   if(error){
     alert('No se pudo finalizar el viaje: ' + error.message);
