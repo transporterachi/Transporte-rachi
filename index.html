@@ -729,7 +729,26 @@ async function logout(){
   await sb.auth.signOut();
   location.reload();
 }
+sb
+  .channel('viajes-tiempo-real')
+  .on(
+    'postgres_changes',
+    {
+      event: '*',
+      schema: 'public',
+      table: 'viajes'
+    },
+    async () => {
+      if(!perfil) return;
 
+      if(perfil.rol === 'chofer'){
+        await cargarViajesChofer();
+      }else{
+        await cargarDatos();
+      }
+    }
+  )
+  .subscribe();
 (async()=>{
   const {data}=await sb.auth.getSession();
   if(data.session) await iniciar(data.session.user);
