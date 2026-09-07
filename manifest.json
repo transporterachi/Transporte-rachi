@@ -1,0 +1,9 @@
+{
+  "name": "Transporte Rachi",
+  "short_name": "Rachi",
+  "start_url": "/Transporte-rachi/",
+  "display": "standalone",
+  "background_color": "#0b1220",
+  "theme_color": "#d6a900",
+  "description": "Sistema de gestión operativa de Transporte Rachi"
+}
