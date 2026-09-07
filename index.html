@@ -531,12 +531,12 @@ if(finalizadosLista.length){
     </button>
   `;
 }
+}
 
 
 document.getElementById('misViajes').innerHTML = html;
 }
 
-}
 async function cargarDatos(){
   const [v,c,f,cl,p]=await Promise.all([
     sb.from('viajes').select('*').order('fecha',{ascending:true}).order('hora',{ascending:true}),
