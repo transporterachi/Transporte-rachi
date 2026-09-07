@@ -898,6 +898,7 @@ async function guardarNuevaPassword(){
   `;
 }
   async function aceptarViaje(id){
+    const v = viajesChoferActuales.find(x => x.id === id);
   const {error} = await sb.rpc('aceptar_viaje', { p_viaje: id });
 
   if(error){
@@ -907,8 +908,8 @@ async function guardarNuevaPassword(){
 await sb.functions.invoke('enviar-push', {
   body: {
     user_id: '57858101-09aa-4805-8120-e9740b2ca511',
-    title: '✅ Viaje aceptado',
-    body: 'Un chofer aceptó un viaje asignado'
+    title: `✅ ${perfil.nombre} aceptó el viaje`,
+body: v ? `🕐 ${String(v.hora).slice(0,5)} · ${v.origen} → ${v.destino}` : 'Viaje aceptado'
   }
 });
   await cargarViajesChofer();
