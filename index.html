@@ -268,7 +268,28 @@ textarea{min-height:80px}
 
 </main>
 </div>
+<div id="choferApp" style="display:none">
 
+  <header>
+    <div class="brand">TRANSPORTE RACHI E HIJOS <span>V3</span></div>
+    <div class="sub">Panel del chofer</div>
+    <div class="userbar" id="choferActual"></div>
+
+    <nav>
+      <button onclick="logout()">Salir</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page active">
+      <h1>Mis viajes</h1>
+      <p class="muted">Servicios que tenés asignados</p>
+
+      <div id="misViajes"></div>
+    </section>
+  </main>
+
+</div>
 <script>
 const SUPABASE_URL = 'https://lfwrujvulimimbpehftf.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_r5eZRfZu7oVyB9hC6Aiz9w_c_Ne_idL';
@@ -321,14 +342,73 @@ async function iniciar(user){
   perfil=p;
 
 document.getElementById('login').style.display='none';
-document.getElementById('app').style.display='block';
 
-  usuarioActual.textContent =
-    perfil.nombre+' · '+perfil.rol.toUpperCase();
+if(perfil.rol === 'chofer'){
+  document.getElementById('app').style.display='none';
+  document.getElementById('choferApp').style.display='block';
 
-  await cargarDatos();
+ document.getElementById('choferActual').textContent =
+  perfil.nombre+' · CHOFER';
+
+  await cargarViajesChofer();
+  return;
 }
 
+document.getElementById('choferApp').style.display='none';
+document.getElementById('app').style.display='block';
+
+usuarioActual.textContent =
+  perfil.nombre+' · '+perfil.rol.toUpperCase();
+
+await cargarDatos();
+async function cargarViajesChofer(){
+
+  const {data,error} = await sb
+    .from('viajes')
+    .select('*')
+    .eq('chofer_id', perfil.chofer_id)
+    .order('fecha',{ascending:true})
+    .order('hora',{ascending:true});
+
+  if(error){
+    document.getElementById('misViajes').innerHTML =
+      '<div class="card">No se pudieron cargar los viajes.</div>';
+    return;
+  }
+
+  const lista = data || [];
+
+  if(lista.length === 0){
+    document.getElementById('misViajes').innerHTML =
+      '<div class="card">No tenés viajes asignados.</div>';
+    return;
+  }
+
+  document.getElementById('misViajes').innerHTML = lista.map(v => `
+    <div class="card" style="margin-bottom:15px">
+      <h2>${v.fecha} · ${String(v.hora).slice(0,5)}</h2>
+
+      <p><strong>Origen:</strong> ${v.origen}</p>
+      <p><strong>Destino:</strong> ${v.destino}</p>
+      <p><strong>Pasajeros:</strong> ${v.pasajeros}</p>
+
+      ${v.observaciones ?
+        `<p><strong>Observaciones:</strong> ${v.observaciones}</p>` : ''}
+
+      <p><strong>Estado:</strong> ${v.estado.toUpperCase()}</p>
+
+      ${v.estado === 'pendiente' ?
+        `<button class="primary" onclick="aceptarViaje('${v.id}')">ACEPTAR VIAJE</button>` : ''}
+
+      ${v.estado === 'confirmado' ?
+        `<button class="primary" onclick="iniciarViaje('${v.id}')">INICIAR VIAJE</button>` : ''}
+
+      ${v.estado === 'en_viaje' ?
+        `<button class="primary" onclick="finalizarViaje('${v.id}')">FINALIZAR VIAJE</button>` : ''}
+
+    </div>
+  `).join('');
+}
 async function cargarDatos(){
   const [v,c,f,cl]=await Promise.all([
     sb.from('viajes').select('*').order('fecha',{ascending:true}).order('hora',{ascending:true}),
@@ -499,6 +579,38 @@ async function guardarNuevaPassword(){
   setTimeout(() => {
     window.location.href = window.location.origin + window.location.pathname;
   }, 1200);
+}
+  async function aceptarViaje(id){
+  const {error} = await sb.rpc('aceptar_viaje', { p_viaje_id: id });
+
+  if(error){
+    alert('No se pudo aceptar el viaje: ' + error.message);
+    return;
+  }
+
+  await cargarViajesChofer();
+}
+
+async function iniciarViaje(id){
+  const {error} = await sb.rpc('iniciar_viaje', { p_viaje_id: id });
+
+  if(error){
+    alert('No se pudo iniciar el viaje: ' + error.message);
+    return;
+  }
+
+  await cargarViajesChofer();
+}
+
+async function finalizarViaje(id){
+  const {error} = await sb.rpc('finalizar_viaje', { p_viaje_id: id });
+
+  if(error){
+    alert('No se pudo finalizar el viaje: ' + error.message);
+    return;
+  }
+
+  await cargarViajesChofer();
 }
 async function logout(){
   await sb.auth.signOut();
