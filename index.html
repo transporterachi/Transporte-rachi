@@ -465,6 +465,7 @@ if(finalizadosLista.length){
 }
 
 document.getElementById('misViajes').innerHTML = html;
+}
 async function cargarDatos(){
   const [v,c,f,cl]=await Promise.all([
     sb.from('viajes').select('*').order('fecha',{ascending:true}).order('hora',{ascending:true}),
