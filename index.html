@@ -979,10 +979,19 @@ aviso.innerHTML = `
   </button>
 `;
     }
+}else{
+  await cargarDatos();
 
-  }else{
-    await cargarDatos();
+  if(
+    payload.eventType === 'UPDATE' &&
+    payload.old &&
+    payload.new &&
+    payload.old.estado === 'pendiente' &&
+    payload.new.estado === 'confirmado'
+  ){
+    alert('✅ El chofer aceptó el viaje');
   }
+}
 }
   )
   .subscribe();
