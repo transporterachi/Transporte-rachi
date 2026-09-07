@@ -997,6 +997,14 @@ aviso.innerHTML = `
   payload.new.estado === 'en_viaje'
 ){
   alert('🚐 El chofer inició el viaje');
+    }
+
+      if(
+  payload.eventType === 'UPDATE' &&
+  payload.new &&
+  payload.new.estado === 'finalizado'
+){
+  alert('🏁 El chofer finalizó el viaje');
 }
 }
 }
