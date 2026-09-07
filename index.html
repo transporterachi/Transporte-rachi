@@ -936,6 +936,7 @@ sb
       table: 'viajes'
     },
    async (payload) => {
+     console.log('REALTIME VIAJE:', payload);
   if(!perfil) return;
 
   if(perfil.rol === 'chofer'){
