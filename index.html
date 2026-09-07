@@ -980,34 +980,32 @@ aviso.innerHTML = `
 `;
     }
 }else{
-  await cargarDatos();
 
   if(
     payload.eventType === 'UPDATE' &&
-    
     payload.new &&
-    
     payload.new.estado === 'confirmado'
   ){
     alert('✅ El chofer aceptó el viaje');
   }
-    if(
-  payload.eventType === 'UPDATE' &&
-  payload.new &&
-  payload.new.estado === 'en_viaje'
-){
-  alert('🚐 El chofer inició el viaje');
-    }
 
-      if(
-  payload.eventType === 'UPDATE' &&
-  payload.new &&
- payload.new.estado === 'finalizado'
-){
-  alert('🏁 El chofer finalizó el viaje');
-}
+  if(
+    payload.eventType === 'UPDATE' &&
+    payload.new &&
+    payload.new.estado === 'en_viaje'
+  ){
+    alert('🚐 El chofer inició el viaje');
+  }
 
-await cargarDatos();
+  if(
+    payload.eventType === 'UPDATE' &&
+    payload.new &&
+    payload.new.estado === 'finalizado'
+  ){
+    alert('🏁 El chofer finalizó el viaje');
+  }
+
+  await cargarDatos();
 }
 }
   )
