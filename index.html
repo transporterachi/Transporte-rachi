@@ -292,6 +292,7 @@ textarea{min-height:80px}
     <section class="page active">
       <h1>Mis viajes</h1>
       <p class="muted">Servicios que tenés asignados</p>
+      <div id="notificacionNuevoViaje" class="card" style="display:none;margin-bottom:15px"></div>
 <div id="avisoChofer" class="card" style="display:none;margin-bottom:15px;font-weight:700"></div>
       <div id="misViajes"></div>
     </section>
@@ -946,7 +947,7 @@ sb
       payload.new.chofer_id === perfil.chofer_id &&
       payload.new.estado === 'pendiente'
     ){
-      const aviso = document.getElementById('avisoChofer');
+      const aviso = document.getElementById('notificacionNuevoViaje');
 
      const viajeNuevo = payload.new;
 
