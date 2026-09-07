@@ -322,10 +322,18 @@ let viajesChoferActuales = [];
 async function login(){
   error.textContent='';
 
-  const {data, error:err}=await sb.auth.signInWithPassword({
-    email:email.value.trim(),
-    password:password.value
-  });
+  let usuario = email.value.trim();
+
+if(!usuario.includes('@')){
+  const numero = usuario.replace(/\D/g, '');
+  usuario = `chofer.${numero}@transporterachi.local`;
+}
+
+  
+const {data, error:err}=await sb.auth.signInWithPassword({
+  email:usuario,
+  password:password.value
+});
 
   if(err){
     error.textContent='Correo o contraseña incorrectos.';
