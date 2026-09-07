@@ -933,11 +933,74 @@ async function logout(){
   await sb.auth.signOut();
   location.reload();
 }
-  async function activarNotificaciones(){
+ async function activarNotificaciones(){
   if(!('Notification' in window)){
     alert('Este dispositivo no admite notificaciones.');
     return;
   }
+
+  if(!('serviceWorker' in navigator)){
+    alert('Este navegador no admite Service Worker.');
+    return;
+  }
+
+  const permiso = await Notification.requestPermission();
+
+  if(permiso !== 'granted'){
+    alert('No se habilitaron las notificaciones.');
+    return;
+  }
+
+  const registro = await navigator.serviceWorker.ready;
+
+  const publicKey = "BFRwtda2ksWIGrpQVDrqp6UKeuLuNQHRntjKjNWTyd7bRXwoJJA2fMQWoxWj2su3CwLnxmOSpdOgACqYFkcV0QQ";
+
+  function urlBase64ToUint8Array(base64String){
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+      .replace(/-/g, '+')
+      .replace(/_/g, '/');
+
+    const rawData = atob(base64);
+    return Uint8Array.from([...rawData].map(char => char.charCodeAt(0)));
+  }
+
+  let suscripcion = await registro.pushManager.getSubscription();
+
+  if(!suscripcion){
+    suscripcion = await registro.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(publicKey)
+    });
+  }
+
+  const { data: sesion } = await sb.auth.getSession();
+
+  if(!sesion.session){
+    alert('Primero iniciá sesión.');
+    return;
+  }
+
+  const datos = suscripcion.toJSON();
+
+  const { error } = await sb
+    .from('push_subscriptions')
+    .upsert({
+      user_id: sesion.session.user.id,
+      endpoint: datos.endpoint,
+      p256dh: datos.keys.p256dh,
+      auth_key: datos.keys.auth
+    }, {
+      onConflict: 'endpoint'
+    });
+
+  if(error){
+    alert('No se pudo registrar el dispositivo: ' + error.message);
+    return;
+  }
+
+  alert('🔔 Dispositivo registrado para recibir notificaciones');
+}
 
   const permiso = await Notification.requestPermission();
 
