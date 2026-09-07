@@ -938,7 +938,13 @@ async function finalizarViaje(id){
     alert('No se pudo finalizar el viaje: ' + error.message);
     return;
   }
-
+await sb.functions.invoke('enviar-push', {
+  body: {
+    user_id: '57858101-09aa-4805-8120-e9740b2ca511',
+    title: '🏁 Viaje finalizado',
+    body: 'Un chofer finalizó un viaje'
+  }
+});
   await cargarViajesChofer();
 }
 async function logout(){
