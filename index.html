@@ -400,34 +400,40 @@ if(pendientes > 0){
     return;
   }
 
-  document.getElementById('misViajes').innerHTML = lista.map(v => `
+  const pendientesLista = lista.filter(v => v.estado === 'pendiente' || v.estado === 'confirmado');
+const enCursoLista = lista.filter(v => v.estado === 'en_viaje');
+const finalizadosLista = lista.filter(v => v.estado === 'finalizado');
+
+function tarjetaChofer(v){
+  return `
     <div class="card" style="margin-bottom:15px">
       <h2>${v.fecha} · ${String(v.hora).slice(0,5)}</h2>
 
-    <p><strong>Cliente:</strong> ${v.clientes?.nombre || 'Sin cliente'}</p>
+      <p><strong>Cliente:</strong> ${v.clientes?.nombre || 'Sin cliente'}</p>
+      <p><strong>Origen:</strong> ${v.origen}</p>
+      <p><strong>Destino:</strong> ${v.destino}</p>
+      <p><strong>Pasajeros:</strong> ${v.pasajeros}</p>
 
-<p><strong>Origen:</strong> ${v.origen}</p>
-<p><strong>Destino:</strong> ${v.destino}</p>
-<p><strong>Pasajeros:</strong> ${v.pasajeros}</p>
+      <p>
+        <strong>Vehículo:</strong>
+        ${v.vehiculos?.vehiculo || 'Sin vehículo'}
+        ${v.vehiculos?.patente ? ' · ' + v.vehiculos.patente : ''}
+      </p>
 
-<p>
-  <strong>Vehículo:</strong>
-  ${v.vehiculos?.vehiculo || 'Sin vehículo'}
-  ${v.vehiculos?.patente ? ' · ' + v.vehiculos.patente : ''}
-</p>
-<a
-  class="primary"
-  style="display:inline-block;text-decoration:none;margin-top:8px"
-  href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(v.destino)}"
-  target="_blank"
-  rel="noopener"
->
-  ABRIR EN GOOGLE MAPS
-</a>
+      <a
+        class="primary"
+        style="display:inline-block;text-decoration:none;margin-top:8px"
+        href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(v.destino)}"
+        target="_blank"
+        rel="noopener"
+      >
+        ABRIR EN GOOGLE MAPS
+      </a>
+
       ${v.observaciones ?
         `<p><strong>Observaciones:</strong> ${v.observaciones}</p>` : ''}
 
-      <p><strong>Estado:</strong> ${v.estado.toUpperCase()}</p>
+      <p><strong>Estado:</strong> ${v.estado.toUpperCase().replace('_',' ')}</p>
 
       ${v.estado === 'pendiente' ?
         `<button class="primary" onclick="aceptarViaje('${v.id}')">ACEPTAR VIAJE</button>` : ''}
@@ -437,10 +443,28 @@ if(pendientes > 0){
 
       ${v.estado === 'en_viaje' ?
         `<button class="primary" onclick="finalizarViaje('${v.id}')">FINALIZAR VIAJE</button>` : ''}
-
     </div>
-  `).join('');
+  `;
 }
+
+let html = '';
+
+if(enCursoLista.length){
+  html += '<h2 style="margin-top:20px">🚐 VIAJE EN CURSO</h2>';
+  html += enCursoLista.map(tarjetaChofer).join('');
+}
+
+if(pendientesLista.length){
+  html += '<h2 style="margin-top:20px">📅 PRÓXIMOS VIAJES</h2>';
+  html += pendientesLista.map(tarjetaChofer).join('');
+}
+
+if(finalizadosLista.length){
+  html += '<h2 style="margin-top:30px">✅ FINALIZADOS</h2>';
+  html += finalizadosLista.map(tarjetaChofer).join('');
+}
+
+document.getElementById('misViajes').innerHTML = html;
 async function cargarDatos(){
   const [v,c,f,cl]=await Promise.all([
     sb.from('viajes').select('*').order('fecha',{ascending:true}).order('hora',{ascending:true}),
