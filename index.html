@@ -1016,6 +1016,14 @@ aviso.innerHTML = `
     payload.new.estado === 'confirmado'
   ){
    alert(`✅ ${nombreChofer(payload.new.chofer_id)} aceptó el viaje\n🕐 ${String(payload.new.hora).slice(0,5)} · ${payload.new.origen} → ${payload.new.destino}`);
+    const registro = await navigator.serviceWorker.ready;
+
+registro.showNotification(
+  `✅ ${nombreChofer(payload.new.chofer_id)} aceptó el viaje`,
+  {
+    body: `🕐 ${String(payload.new.hora).slice(0,5)} · ${payload.new.origen} → ${payload.new.destino}`
+  }
+);
   }
 
   if(
