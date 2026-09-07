@@ -309,7 +309,7 @@ let vehiculos=[];
 let choferes=[];
 let clientes=[];
 let perfil=null;
-
+let viajesChoferActuales = [];
 async function login(){
   error.textContent='';
 
@@ -360,51 +360,10 @@ document.getElementById('app').style.display='block';
 usuarioActual.textContent =
   perfil.nombre+' · '+perfil.rol.toUpperCase();
 
-await cargarDatos();}
-async function cargarViajesChofer(){
-
-  const {data,error} = await sb
-    .from('viajes')
-    .select(`
-  *,
-  clientes(nombre),
-  vehiculos(vehiculo, patente)
-`)
-    .eq('chofer_id', perfil.chofer_id)
-    .order('fecha',{ascending:true})
-    .order('hora',{ascending:true});
-
-  if(error){
-    document.getElementById('misViajes').innerHTML =
-      '<div class="card">No se pudieron cargar los viajes.</div>';
-    return;
-  }
-
-  const lista = data || [];
-const pendientes = lista.filter(v => v.estado === 'pendiente').length;
-const aviso = document.getElementById('avisoChofer');
-
-if(pendientes > 0){
-  aviso.style.display = 'block';
-  aviso.textContent =
-    pendientes === 1
-      ? 'Tenés 1 viaje nuevo pendiente'
-      : `Tenés ${pendientes} viajes nuevos pendientes`;
-}else{
-  aviso.style.display = 'none';
-  aviso.textContent = '';
+await cargarDatos();
 }
-  if(lista.length === 0){
-    document.getElementById('misViajes').innerHTML =
-      '<div class="card">No tenés viajes asignados.</div>';
-    return;
-  }
-
-  const pendientesLista = lista.filter(v => v.estado === 'pendiente' || v.estado === 'confirmado');
-const enCursoLista = lista.filter(v => v.estado === 'en_viaje');
-const finalizadosLista = lista.filter(v => v.estado === 'finalizado');
-
-function tarjetaChofer(v){
+  
+  function tarjetaChofer(v){
   return `
     <div class="card" style="margin-bottom:15px">
       <h2>${v.fecha} · ${String(v.hora).slice(0,5)}</h2>
@@ -448,6 +407,53 @@ function tarjetaChofer(v){
 }
 
 let html = '';
+async function cargarViajesChofer(){
+
+  const {data,error} = await sb
+    .from('viajes')
+    .select(`
+  *,
+  clientes(nombre),
+  vehiculos(vehiculo, patente)
+`)
+    .eq('chofer_id', perfil.chofer_id)
+    .order('fecha',{ascending:true})
+    .order('hora',{ascending:true});
+
+  if(error){
+    document.getElementById('misViajes').innerHTML =
+      '<div class="card">No se pudieron cargar los viajes.</div>';
+    return;
+  }
+
+  const lista = data || [];
+  viajesChoferActuales = lista;
+const pendientes = lista.filter(v => v.estado === 'pendiente').length;
+const aviso = document.getElementById('avisoChofer');
+
+if(pendientes > 0){
+  aviso.style.display = 'block';
+  aviso.textContent =
+    pendientes === 1
+      ? 'Tenés 1 viaje nuevo pendiente'
+      : `Tenés ${pendientes} viajes nuevos pendientes`;
+}else{
+  aviso.style.display = 'none';
+  aviso.textContent = '';
+}
+  if(lista.length === 0){
+    document.getElementById('misViajes').innerHTML =
+      '<div class="card">No tenés viajes asignados.</div>';
+    return;
+  }
+
+  const pendientesLista = lista.filter(v => v.estado === 'pendiente' || v.estado === 'confirmado');
+const enCursoLista = lista.filter(v => v.estado === 'en_viaje');
+const todosFinalizados = lista.filter(v => v.estado === 'finalizado');
+const finalizadosLista = todosFinalizados.slice(-5).reverse();
+
+
+let html = '';
 
 if(enCursoLista.length){
   html += '<h2 style="margin-top:20px">🚐 VIAJE EN CURSO</h2>';
@@ -462,7 +468,14 @@ if(pendientesLista.length){
 if(finalizadosLista.length){
   html += '<h2 style="margin-top:30px">✅ FINALIZADOS</h2>';
   html += finalizadosLista.map(tarjetaChofer).join('');
+  if(todosFinalizados.length > 5){
+  html += `
+    <button class="secondary" style="width:100%;margin-top:10px" onclick="verHistorialChofer()">
+      VER HISTORIAL (${todosFinalizados.length})
+    </button>
+  `;
 }
+
 
 document.getElementById('misViajes').innerHTML = html;
 }
@@ -729,6 +742,21 @@ async function guardarNuevaPassword(){
   }
 
   await cargarDatos();
+}
+  function verHistorialChofer(){
+  const finalizados = viajesChoferActuales
+    .filter(v => v.estado === 'finalizado')
+    .reverse();
+
+  document.getElementById('misViajes').innerHTML = `
+    <button class="secondary" style="margin-bottom:20px" onclick="cargarViajesChofer()">
+      ← VOLVER A MIS VIAJES
+    </button>
+
+    <h2>📋 HISTORIAL DE VIAJES</h2>
+
+    ${finalizados.map(tarjetaChofer).join('')}
+  `;
 }
   async function aceptarViaje(id){
   const {error} = await sb.rpc('aceptar_viaje', { p_viaje: id });
